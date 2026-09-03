@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tacos Ruth — Delivery de tacos en Longchamps</title>
+<meta name="description" content="Tacos de ternera y papas fritas con onda casera. Pedí por WhatsApp, delivery en Longchamps y Glew, miércoles a domingos de 19:30 a 00:00.">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Tacos Ruth — Más que tacos">
+<meta property="og:description" content="Tacos de ternera y papas fritas con onda casera. Pedí por WhatsApp, delivery en Longchamps y Glew.">
+<meta property="og:image" content="assets/logo.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="assets/logo.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/logo.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --blue: #1B2FB5;
+    --blue-dark: #131f80;
+    --cream: #F5EBDC;
+    --cream-soft: #efe1cb;
+    --black: #0c0c0c;
+    --black-card: #171717;
+    --radius: 18px;
+    --shadow: 0 10px 30px rgba(0,0,0,.25);
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  body{
+    margin:0;
+    font-family:'Inter', sans-serif;
+    background: var(--cream);
+    color: var(--black);
+    -webkit-font-smoothing: antialiased;
+    padding-bottom: 90px; /* espacio para carrito flotante */
+  }
+  img{ max-width:100%; display:block; }
+  .condensed{
+    font-family:'Anton', sans-serif;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+  }
+  .wrap{
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  a{ color: inherit; }
+  button{ font-family: inherit; cursor:pointer; }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    background: var(--cream);
+    padding: 44px 20px 40px;
+    text-align: center;
+  }
+  .hero__sparks{
+    display:flex;
+    justify-content:center;
+    gap: 14px;
+    margin-bottom: 6px;
+    color: var(--blue);
+  }
+  .hero img.logo{
+    max-width: 320px;
+    width: 78%;
+    margin: 0 auto 10px;
+  }
+  .hero__claim{
+    font-family:'Anton', sans-serif;
+    color: var(--blue);
+    font-size: clamp(26px, 7vw, 36px);
+    line-height: 1.15;
+    margin: 6px 0 26px;
+    letter-spacing: .3px;
+  }
+  .hero__ctas{
+    display:flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 320px;
+    margin: 0 auto;
+  }
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    padding: 15px 22px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 16px;
+    text-decoration:none;
+    border: 2px solid var(--blue);
+    transition: transform .15s ease, opacity .15s ease;
+  }
+  .btn:active{ transform: scale(.97); }
+  .btn--solid{ background: var(--blue); color: var(--cream); }
+  .btn--outline{ background: transparent; color: var(--blue); }
+  .btn--solid:hover{ background: var(--blue-dark); }
+
+  /* ---------- CLOSED BANNER ---------- */
+  .closed-banner{
+    display:none;
+    background: #FFDE7A;
+    color: #4a3400;
+    text-align:center;
+    font-weight:700;
+    font-size: 14px;
+    padding: 12px 20px;
+    border-top: 2px solid var(--blue);
+    border-bottom: 2px solid var(--blue);
+  }
+  .closed-banner.show{ display:block; }
+
+  /* ---------- INFO BAR ---------- */
+  .infobar{
+    background: var(--blue);
+    color: var(--cream);
+  }
+  .infobar .wrap{
+    padding: 16px 20px;
+    display:flex;
+    flex-direction:column;
+    gap: 10px;
+    font-size: 14.5px;
+    font-weight: 600;
+  }
+  .infobar .row{ display:flex; align-items:center; gap:10px; }
+  @media (min-width: 620px){
+    .infobar .wrap{ flex-direction:row; justify-content:center; flex-wrap:wrap; gap: 26px; }
+  }
+
+  /* ---------- MENU ---------- */
+  .menu-section{
+    background: var(--black);
+    padding: 48px 0 56px;
+    position:relative;
+  }
+  .menu-section .zigzag{
+    position:absolute; top:-1px; left:0; right:0; height:14px;
+    background: repeating-linear-gradient(135deg, var(--cream) 0 10px, transparent 10px 20px);
+    opacity:.15;
+  }
+  .menu-title{
+    color: var(--cream);
+    text-align:center;
+    font-size: clamp(30px, 8vw, 42px);
+    margin: 0 0 6px;
+  }
+  .menu-subtitle{
+    color: #b9b3a6;
+    text-align:center;
+    font-size: 14.5px;
+    margin: 0 0 32px;
+  }
+  .menu-subtitle strong{ color: var(--cream); }
+
+  .menu-grid{
+    display:flex;
+    flex-direction:column;
+    gap: 22px;
+  }
+
+  .card{
+    background: var(--black-card);
+    border-radius: var(--radius);
+    overflow:hidden;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(245,235,220,.08);
+    display:flex;
+    flex-direction:column;
+    height: 100%;
+  }
+  .card__img-wrap{
+    aspect-ratio: 1 / 1;
+    overflow:hidden;
+    background: #222;
+  }
+  .card__img-wrap img{ width:100%; height:100%; object-fit:cover; }
+  .card__body{
+    padding: 18px 18px 20px;
+    display:flex;
+    flex-direction:column;
+    flex:1;
+  }
+  .card__name{
+    color: var(--cream);
+    font-size: 24px;
+    margin: 0 0 8px;
+  }
+  .card__desc{
+    color: #cfc9bc;
+    font-size: 14.5px;
+    line-height: 1.45;
+    margin: 0;
+    flex: 1;
+  }
+  .card__dip{
+    color: #8f8a7f;
+    font-size: 12.5px;
+    font-style: italic;
+    margin: 8px 0 0;
+  }
+  .card__footer{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap: 12px;
+    margin-top: 18px;
+  }
+  .card__price{
+    font-family:'Anton', sans-serif;
+    color: var(--cream);
+    background: var(--blue);
+    padding: 7px 14px;
+    border-radius: 999px;
+    font-size: 18px;
+    letter-spacing: .3px;
+  }
+  .qty{
+    display:flex;
+    align-items:center;
+    gap: 12px;
+    background: rgba(245,235,220,.08);
+    border-radius: 999px;
+    padding: 6px 8px;
+  }
+  .qty button{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: none;
+    background: var(--cream);
+    color: var(--black);
+    font-size: 18px;
+    font-weight: 800;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    line-height:1;
+  }
+  .qty button:disabled{ opacity:.35; }
+  .qty__num{
+    color: var(--cream);
+    font-weight: 700;
+    min-width: 16px;
+    text-align:center;
+    font-variant-numeric: tabular-nums;
+  }
+  .card.has-qty{ outline: 2px solid var(--blue); outline-offset:-2px; }
+  .card.pulse{ animation: pulse .35s ease; }
+  @keyframes pulse{
+    0%{ transform: scale(1); }
+    35%{ transform: scale(1.015); box-shadow: 0 0 0 4px rgba(27,47,181,.35), var(--shadow); }
+    100%{ transform: scale(1); }
+  }
+
+  /* ---------- FLOATING CART ---------- */
+  .cart-fab{
+    position: fixed;
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+    max-width: 528px;
+    margin: 0 auto;
+    background: var(--blue);
+    color: var(--cream);
+    border: none;
+    border-radius: 999px;
+    padding: 15px 20px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    box-shadow: 0 10px 24px rgba(0,0,0,.35);
+    font-weight: 700;
+    font-size: 15px;
+    z-index: 40;
+    transform: translateY(120%);
+    transition: transform .25s ease;
+  }
+  .cart-fab.show{ transform: translateY(0); }
+  .cart-fab__count{
+    background: var(--cream);
+    color: var(--blue);
+    border-radius: 999px;
+    width: 24px;
+    height: 24px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    font-size: 13px;
+    margin-right: 10px;
+  }
+  .cart-fab__left{ display:flex; align-items:center; }
+  .cart-fab__total{ font-family:'Anton', sans-serif; font-size: 17px; letter-spacing:.3px; }
+
+  /* ---------- CART PANEL ---------- */
+  .overlay{
+    position: fixed; inset:0;
+    background: rgba(0,0,0,.55);
+    opacity:0; pointer-events:none;
+    transition: opacity .2s ease;
+    z-index: 50;
+  }
+  .overlay.show{ opacity:1; pointer-events:auto; }
+
+  .cart-panel{
+    position: fixed;
+    left:0; right:0; bottom:0;
+    max-height: 88vh;
+    background: var(--cream);
+    border-radius: 22px 22px 0 0;
+    padding: 18px 20px calc(20px + env(safe-area-inset-bottom));
+    transform: translateY(100%);
+    transition: transform .28s ease;
+    z-index: 60;
+    overflow-y: auto;
+    box-shadow: 0 -10px 30px rgba(0,0,0,.3);
+  }
+  .cart-panel.show{ transform: translateY(0); }
+  .cart-panel__handle{
+    width: 42px; height: 5px; border-radius: 4px;
+    background: rgba(27,47,181,.25);
+    margin: 0 auto 14px;
+  }
+  .cart-panel h2{
+    font-family:'Anton', sans-serif;
+    color: var(--blue);
+    font-size: 24px;
+    margin: 0 0 14px;
+  }
+  .cart-items{ display:flex; flex-direction:column; gap:10px; margin-bottom: 6px; }
+  .cart-item{
+    display:flex; align-items:center; justify-content:space-between;
+    gap: 10px;
+    background: #fff8ee;
+    border-radius: 12px;
+    padding: 10px 12px;
+  }
+  .cart-item__info{ font-size: 14px; font-weight:600; }
+  .cart-item__info span{ display:block; font-weight:400; font-size:12.5px; color:#6b6455; }
+  .cart-item__right{ display:flex; align-items:center; gap:10px; }
+  .cart-item__price{ font-weight:700; font-size:14px; min-width: 72px; text-align:right; }
+  .cart-empty{
+    text-align:center;
+    color:#8a8272;
+    padding: 18px 0;
+    font-size: 14px;
+  }
+
+  .cart-total{
+    display:flex; justify-content:space-between; align-items:center;
+    border-top: 2px dashed rgba(27,47,181,.25);
+    margin-top: 14px;
+    padding-top: 14px;
+    font-family:'Anton', sans-serif;
+    color: var(--blue);
+    font-size: 20px;
+  }
+
+  .field{ margin-top: 16px; }
+  .field label{
+    display:block;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--blue);
+    margin-bottom: 6px;
+  }
+  .field input, .field textarea{
+    width:100%;
+    border: 1.5px solid rgba(27,47,181,.3);
+    background: #fff;
+    border-radius: 12px;
+    padding: 11px 13px;
+    font-family: inherit;
+    font-size: 14.5px;
+    color: var(--black);
+  }
+  .field textarea{ resize: vertical; min-height: 56px; }
+  .field input:focus, .field textarea:focus{ outline: 2px solid var(--blue); }
+
+  .toggle{
+    display:flex;
+    gap: 10px;
+    margin-top: 6px;
+  }
+  .toggle label{
+    flex:1;
+    text-align:center;
+    padding: 11px 10px;
+    border-radius: 12px;
+    border: 1.5px solid rgba(27,47,181,.3);
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--blue);
+    cursor:pointer;
+    transition: background .15s ease, color .15s ease;
+  }
+  .toggle input{ display:none; }
+  .toggle input:checked + label{
+    background: var(--blue);
+    color: var(--cream);
+    border-color: var(--blue);
+  }
+
+  .send-btn{
+    width:100%;
+    margin-top: 20px;
+    padding: 16px;
+    border-radius: 999px;
+    border:none;
+    background: #25D366;
+    color: #06301c;
+    font-weight: 800;
+    font-size: 16px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+  }
+  .send-btn:disabled{
+    background: #cfcabf;
+    color: #7a7568;
+    cursor:not-allowed;
+  }
+  .close-panel{
+    position:absolute;
+    top: 16px; right: 16px;
+    background:none; border:none;
+    font-size: 22px;
+    color: var(--blue);
+    line-height:1;
+    padding: 4px 8px;
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    background: var(--cream);
+    border-top: 3px solid var(--blue);
+    padding: 40px 20px 30px;
+    text-align:center;
+  }
+  footer .logo-mini{
+    width: 64px;
+    margin: 0 auto 14px;
+  }
+  footer h3{
+    font-family:'Anton', sans-serif;
+    color: var(--blue);
+    font-size: 22px;
+    margin: 0 0 14px;
+  }
+  footer p{
+    font-size: 14px;
+    line-height: 1.7;
+    margin: 4px 0;
+    color: #3a3a3a;
+  }
+  footer .footer-links{
+    margin-top: 18px;
+    display:flex;
+    justify-content:center;
+    gap: 14px;
+    flex-wrap:wrap;
+  }
+  footer .footer-links a{
+    text-decoration:none;
+    font-weight:700;
+    font-size: 14px;
+    color: var(--blue);
+    border: 2px solid var(--blue);
+    padding: 9px 16px;
+    border-radius: 999px;
+  }
+  footer .copy{
+    margin-top: 26px;
+    font-size: 12px;
+    color: #8a8272;
+  }
+
+  @media (min-width: 720px){
+    .menu-grid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= HERO ================= -->
+<section class="hero">
+  <div class="hero__sparks" aria-hidden="true">✦ ✧ ✦</div>
+  <img class="logo" src="assets/logo.png" alt="Tacos Ruth — Más que tacos">
+  <p class="hero__claim">Tacos que sí saben a casa</p>
+  <div class="hero__ctas">
+    <a href="#menu" class="btn btn--solid">Ver menú</a>
+    <a id="heroWhatsapp" href="https://wa.me/5491132870962" target="_blank" rel="noopener" class="btn btn--outline">Pedir por WhatsApp</a>
+  </div>
+</section>
+
+<div id="closedBanner" class="closed-banner">
+  🌙 Ahora estamos cerrados — igual dejanos tu pedido y te confirmamos apenas abramos
+</div>
+
+<!-- ================= INFO BAR ================= -->
+<div class="infobar">
+  <div class="wrap">
+    <div class="row">📍 Zona Longchamps - Glew</div>
+    <div class="row">🛵 Delivery</div>
+    <div class="row">🕐 Miércoles a domingos de 19:30 a 00:00</div>
+  </div>
+</div>
+
+<!-- ================= MENU ================= -->
+<section class="menu-section" id="menu">
+  <div class="zigzag" aria-hidden="true"></div>
+  <div class="wrap" style="max-width:960px;">
+    <h2 class="condensed menu-title">Nuestro menú</h2>
+    <p class="menu-subtitle">Todo hecho con <strong>carne de ternera desmenuzada</strong> y buena onda 🌮</p>
+
+    <div class="menu-grid" id="menuGrid"></div>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+  <img class="logo-mini" src="assets/logo.png" alt="Tacos Ruth">
+  <h3>Tacos Ruth</h3>
+  <p>🕐 Miércoles a domingos de 19:30 a 00:00</p>
+  <p>📍 Delivery en Longchamps y Glew, Buenos Aires</p>
+  <div class="footer-links">
+    <a href="https://instagram.com/tacos_ruth" target="_blank" rel="noopener">Instagram @tacos_ruth</a>
+    <a href="https://wa.me/5491132870962" target="_blank" rel="noopener">WhatsApp</a>
+  </div>
+  <p class="copy">Tacos Ruth · Más que tacos</p>
+</footer>
+
+<!-- ================= CARRITO FLOTANTE ================= -->
+<button class="cart-fab" id="cartFab">
+  <span class="cart-fab__left"><span class="cart-fab__count" id="cartCount">0</span> Ver pedido</span>
+  <span class="cart-fab__total" id="cartFabTotal">$0</span>
+</button>
+
+<div class="overlay" id="overlay"></div>
+
+<div class="cart-panel" id="cartPanel">
+  <button class="close-panel" id="closePanel" aria-label="Cerrar">✕</button>
+  <div class="cart-panel__handle"></div>
+  <h2>Tu pedido</h2>
+
+  <div class="cart-items" id="cartItems"></div>
+
+  <div class="cart-total">
+    <span>Total</span>
+    <span id="cartTotal">$0</span>
+  </div>
+
+  <div class="field">
+    <label for="entregaToggle">Entrega</label>
+    <div class="toggle">
+      <input type="radio" name="entrega" id="entregaDelivery" value="Delivery" checked>
+      <label for="entregaDelivery">🛵 Delivery</label>
+      <input type="radio" name="entrega" id="entregaRetiro" value="Retiro">
+      <label for="entregaRetiro">🏠 Retiro</label>
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="nombreInput">Nombre</label>
+    <input type="text" id="nombreInput" placeholder="¿Cómo te llamás?">
+  </div>
+
+  <div class="field" id="direccionField">
+    <label for="direccionInput">Dirección</label>
+    <input type="text" id="direccionInput" placeholder="Calle, número y localidad">
+  </div>
+
+  <div class="field">
+    <label for="notasInput">Aclaraciones</label>
+    <textarea id="notasInput" placeholder="Sin cebolla, sin picante, etc. (opcional)"></textarea>
+  </div>
+
+  <button class="send-btn" id="sendBtn" disabled>📲 Enviar pedido por WhatsApp</button>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var WHATSAPP_NUMBER = "5491132870962";
+
+  var PRODUCTS = [
+    {
+      id: 1,
+      nombre: "MENÚ 1",
+      desc: "3 tacos de ternera con papas fritas",
+      dip: "Dips de acompañamiento",
+      precio: 15000,
+      img: "assets/menu-1.jpg"
+    },
+    {
+      id: 2,
+      nombre: "MENÚ 2",
+      desc: "5 tacos de ternera",
+      dip: "Dips de acompañamiento",
+      precio: 20000,
+      img: "assets/menu-2.jpg"
+    },
+    {
+      id: 3,
+      nombre: "MENÚ 3",
+      desc: "Bandeja de papas fritas con carne de ternera desmenuzada",
+      dip: "Dip de acompañante (salsa picante)",
+      precio: 15000,
+      img: "assets/menu-3.jpg"
+    }
+  ];
+
+  var cart = {}; // { id: qty }
+
+  function formatPrice(n){
+    return "$" + n.toLocaleString("es-AR");
+  }
+
+  function cartTotal(){
+    var total = 0;
+    Object.keys(cart).forEach(function(id){
+      var p = PRODUCTS.find(function(p){ return p.id == id; });
+      total += p.precio * cart[id];
+    });
+    return total;
+  }
+
+  function cartCount(){
+    return Object.values(cart).reduce(function(a,b){ return a+b; }, 0);
+  }
+
+  // ---------- Render menú ----------
+  var menuGrid = document.getElementById("menuGrid");
+
+  function renderMenu(){
+    menuGrid.innerHTML = "";
+    PRODUCTS.forEach(function(p){
+      var qty = cart[p.id] || 0;
+      var card = document.createElement("div");
+      card.className = "card" + (qty > 0 ? " has-qty" : "");
+      card.id = "card-" + p.id;
+      card.innerHTML =
+        '<div class="card__img-wrap"><img src="' + p.img + '" alt="' + p.nombre + '" loading="lazy"></div>' +
+        '<div class="card__body">' +
+          '<h3 class="condensed card__name">' + p.nombre + '</h3>' +
+          '<p class="card__desc">' + p.desc + '</p>' +
+          '<p class="card__dip">' + p.dip + '</p>' +
+          '<div class="card__footer">' +
+            '<span class="card__price">' + formatPrice(p.precio) + '</span>' +
+            '<div class="qty">' +
+              '<button type="button" data-action="dec" data-id="' + p.id + '" aria-label="Quitar">–</button>' +
+              '<span class="qty__num" id="qty-' + p.id + '">' + qty + '</span>' +
+              '<button type="button" data-action="inc" data-id="' + p.id + '" aria-label="Agregar">+</button>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+      menuGrid.appendChild(card);
+    });
+  }
+
+  menuGrid.addEventListener("click", function(e){
+    var btn = e.target.closest("button[data-action]");
+    if(!btn) return;
+    var id = Number(btn.dataset.id);
+    var action = btn.dataset.action;
+    var current = cart[id] || 0;
+
+    if(action === "inc"){
+      cart[id] = current + 1;
+    } else if(action === "dec" && current > 0){
+      cart[id] = current - 1;
+      if(cart[id] === 0) delete cart[id];
+    }
+
+    document.getElementById("qty-" + id).textContent = cart[id] || 0;
+    var card = document.getElementById("card-" + id);
+    card.classList.toggle("has-qty", !!cart[id]);
+    card.classList.remove("pulse");
+    void card.offsetWidth;
+    card.classList.add("pulse");
+
+    updateCartUI();
+  });
+
+  // ---------- Carrito flotante + panel ----------
+  var cartFab = document.getElementById("cartFab");
+  var cartPanel = document.getElementById("cartPanel");
+  var overlay = document.getElementById("overlay");
+  var cartItemsEl = document.getElementById("cartItems");
+  var cartCountEl = document.getElementById("cartCount");
+  var cartFabTotalEl = document.getElementById("cartFabTotal");
+  var cartTotalEl = document.getElementById("cartTotal");
+  var sendBtn = document.getElementById("sendBtn");
+  var nombreInput = document.getElementById("nombreInput");
+  var direccionInput = document.getElementById("direccionInput");
+  var direccionField = document.getElementById("direccionField");
+  var notasInput = document.getElementById("notasInput");
+
+  function updateCartUI(){
+    var count = cartCount();
+    var total = cartTotal();
+
+    cartCountEl.textContent = count;
+    cartFabTotalEl.textContent = formatPrice(total);
+    cartTotalEl.textContent = formatPrice(total);
+    cartFab.classList.toggle("show", count > 0);
+
+    cartItemsEl.innerHTML = "";
+    if(count === 0){
+      cartItemsEl.innerHTML = '<p class="cart-empty">Todavía no agregaste nada del menú 🌮</p>';
+    } else {
+      Object.keys(cart).forEach(function(id){
+        var p = PRODUCTS.find(function(p){ return p.id == id; });
+        var qty = cart[id];
+        var row = document.createElement("div");
+        row.className = "cart-item";
+        row.innerHTML =
+          '<div class="cart-item__info">' + p.nombre + '<span>' + qty + ' x ' + formatPrice(p.precio) + '</span></div>' +
+          '<div class="cart-item__right">' +
+            '<div class="qty">' +
+              '<button type="button" data-action="dec" data-id="' + p.id + '" aria-label="Quitar">–</button>' +
+              '<span class="qty__num">' + qty + '</span>' +
+              '<button type="button" data-action="inc" data-id="' + p.id + '" aria-label="Agregar">+</button>' +
+            '</div>' +
+            '<span class="cart-item__price">' + formatPrice(p.precio * qty) + '</span>' +
+          '</div>';
+        cartItemsEl.appendChild(row);
+      });
+    }
+
+    validateForm();
+  }
+
+  cartItemsEl.addEventListener("click", function(e){
+    var btn = e.target.closest("button[data-action]");
+    if(!btn) return;
+    var id = Number(btn.dataset.id);
+    var action = btn.dataset.action;
+    var current = cart[id] || 0;
+
+    if(action === "inc"){
+      cart[id] = current + 1;
+    } else if(action === "dec" && current > 0){
+      cart[id] = current - 1;
+      if(cart[id] === 0) delete cart[id];
+    }
+
+    renderMenu();
+    updateCartUI();
+  });
+
+  function openPanel(){
+    cartPanel.classList.add("show");
+    overlay.classList.add("show");
+  }
+  function closePanel(){
+    cartPanel.classList.remove("show");
+    overlay.classList.remove("show");
+  }
+
+  cartFab.addEventListener("click", openPanel);
+  document.getElementById("closePanel").addEventListener("click", closePanel);
+  overlay.addEventListener("click", closePanel);
+
+  function isDelivery(){
+    return document.getElementById("entregaDelivery").checked;
+  }
+
+  document.querySelectorAll('input[name="entrega"]').forEach(function(radio){
+    radio.addEventListener("change", function(){
+      direccionField.style.display = isDelivery() ? "" : "none";
+      validateForm();
+    });
+  });
+
+  nombreInput.addEventListener("input", validateForm);
+  direccionInput.addEventListener("input", validateForm);
+
+  function validateForm(){
+    var hasItems = cartCount() > 0;
+    var hasNombre = nombreInput.value.trim().length > 0;
+    var hasDireccion = !isDelivery() || direccionInput.value.trim().length > 0;
+    sendBtn.disabled = !(hasItems && hasNombre && hasDireccion);
+  }
+
+  function buildWhatsappUrl(){
+    var lines = [];
+    lines.push("*NUEVO PEDIDO - TACOS RUTH*");
+    lines.push("---");
+    Object.keys(cart).forEach(function(id){
+      var p = PRODUCTS.find(function(p){ return p.id == id; });
+      var qty = cart[id];
+      lines.push(qty + "x " + p.nombre + " — " + formatPrice(p.precio * qty));
+    });
+    lines.push("---");
+    lines.push("*TOTAL: " + formatPrice(cartTotal()) + "*");
+    lines.push("");
+    lines.push("Nombre: " + nombreInput.value.trim());
+    lines.push("Entrega: " + (isDelivery() ? "Delivery" : "Retiro"));
+    if(isDelivery()){
+      lines.push("Dirección: " + direccionInput.value.trim());
+    }
+    if(notasInput.value.trim()){
+      lines.push("Aclaraciones: " + notasInput.value.trim());
+    }
+
+    var text = encodeURIComponent(lines.join("\n"));
+    return "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + text;
+  }
+
+  sendBtn.addEventListener("click", function(){
+    if(sendBtn.disabled) return;
+    window.open(buildWhatsappUrl(), "_blank");
+  });
+
+  // ---------- Horario de apertura ----------
+  function checkOpen(){
+    var now = new Date();
+    var day = now.getDay(); // 0 domingo ... 3 miércoles ... 6 sábado
+    var minutes = now.getHours() * 60 + now.getMinutes();
+    var openDay = (day === 3 || day === 4 || day === 5 || day === 6 || day === 0);
+    var openTime = minutes >= (19 * 60 + 30) || minutes < 0; // desde 19:30
+    var isOpen = openDay && openTime;
+
+    document.getElementById("closedBanner").classList.toggle("show", !isOpen);
+  }
+
+  checkOpen();
+  setInterval(checkOpen, 60000);
+
+  renderMenu();
+  updateCartUI();
+})();
+</script>
+
+</body>
+</html>
