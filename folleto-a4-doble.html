@@ -3,9 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <title>Folleto Tacos Ruth — Imposición A4 (2 A5 por hoja)</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Poppins:ital,wght@0,600;0,700;0,800;0,900&display=swap" rel="stylesheet">
 
 <!-- =========================================================
      VARIABLES DE CONTENIDO — editar acá los precios y la fecha,
@@ -33,6 +30,45 @@
 </script>
 
 <style>
+  /* Fuentes locales — sin Google Fonts, sin depender de internet.
+     Baloo 2 es una fuente variable (eje wght 400-800) servida en un solo
+     archivo; Poppins se usa en instancias estáticas por cada peso. */
+  @font-face {
+    font-family: 'Baloo 2';
+    font-style: normal;
+    font-weight: 400 800;
+    font-display: swap;
+    src: url('fonts/baloo2-var.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url('fonts/poppins-600.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url('fonts/poppins-700.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 800;
+    font-display: swap;
+    src: url('fonts/poppins-800.woff2') format('woff2');
+  }
+  @font-face {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 900;
+    font-display: swap;
+    src: url('fonts/poppins-900.woff2') format('woff2');
+  }
+
   @page { size: 297mm 210mm; margin: 0; }
 
   :root{
@@ -373,17 +409,24 @@
     width: 132mm;
     display: block;
   }
+  /* Sticker blanco redondeado que reemplaza a la nube recortada del
+     original: la nube tenía bordes festoneados y su rectángulo interior
+     "limpio" (sin tocar los lóbulos) quedaba demasiado chico, así que el
+     QR terminaba pisando el borde. Este sticker más simple da 32x32mm
+     limpios, con 3.5mm de zona de silencio blanca en los 4 lados
+     alrededor de un QR de 25x25mm (el mínimo pedido). */
   .js-qr-holder {
     position: absolute;
-    left: 62mm;
-    top: 9mm;
-    width: 25mm;
-    height: 25mm;
+    left: 55mm;
+    top: 6mm;
+    width: 32mm;
+    height: 32mm;
     background: #ffffff;
+    border-radius: 6mm;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 2.2mm;
+    padding: 3.5mm;
   }
   .js-qr-holder canvas,
   .js-qr-holder img {

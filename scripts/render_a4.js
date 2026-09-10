@@ -10,6 +10,7 @@ const CUSTOM_CHROMIUM = '/opt/pw-browsers/chromium';
   const page = await browser.newPage();
   const filePath = 'file://' + path.resolve(__dirname, '..', 'folleto-a4-doble.html');
   await page.goto(filePath, { waitUntil: 'networkidle' });
+  await page.evaluate(() => document.fonts.ready);
   await page.waitForTimeout(300);
 
   await page.pdf({
