@@ -1,0 +1,12 @@
+{
+  "name": "folleto-tacos-ruth",
+  "private": true,
+  "scripts": {
+    "build:a5": "node scripts/render.js",
+    "build:a4": "node scripts/render_a4.js",
+    "build": "npm run build:a5 && npm run build:a4"
+  },
+  "devDependencies": {
+    "playwright": "^1.56.1"
+  }
+}

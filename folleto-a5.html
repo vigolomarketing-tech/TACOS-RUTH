@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Folleto Tacos Ruth — A5 doble faz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Poppins:ital,wght@0,600;0,700;0,800;0,900&display=swap" rel="stylesheet">
+
+<!-- =========================================================
+     VARIABLES DE CONTENIDO — editar acá los precios y la fecha,
+     el diseño no se toca.
+     ========================================================= -->
+<script>
+  const CONFIG = {
+    vigencia: "31 de octubre de 2026",
+    hamburguesas: [
+      { nombre: "Simple", antes: "$12.500", ahora: "$10.000" },
+      { nombre: "Doble",  antes: "$15.000", ahora: "$12.000" },
+      { nombre: "Triple", antes: "$18.000", ahora: "$15.000" }
+    ],
+    tacos: [
+      { nombre: "Menú 1", desc: "3 tacos con papas", precio: "$15.000" },
+      { nombre: "Menú 2", desc: "5 tacos", precio: "$20.000" },
+      { nombre: "Menú 3", desc: "Bandeja de papas con carne desmenuzada", precio: "$15.000" }
+    ],
+    promo1: { titulo: "2x HAMBURGUESAS", precio: "$25.000", desc: "Dos dobles con papas", antes: "$30.000" },
+    promo2: { titulo: "COMBO TACO Y BURGER", precio: "$26.000", desc: "1 hamburguesa doble con papas + 3 tacos con papas", antes: "$30.000" },
+    qrUrl: "https://tacosruth.com"
+    // Nota: horario, web, WhatsApp e Instagram del pie NO son variables acá
+    // porque ese bloque se mantiene igual al original y viene de assets/footer_band.png.
+  };
+</script>
+
+<style>
+  @page { size: 148mm 210mm; margin: 0; }
+
+  :root{
+    --azul: #1B2FB5;
+    --azul-osc: #121F82;
+    --crema: #F5EBDC;
+    --rojo: #D81E2C;
+    --blanco: #FFFFFF;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0; padding: 0;
+    background: #888;
+  }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+  }
+
+  .page {
+    width: 148mm;
+    height: 210mm;
+    position: relative;
+    overflow: hidden;
+    background: var(--azul);
+    page-break-after: always;
+  }
+  .page:last-child { page-break-after: auto; }
+
+  /* ---------- FRENTE (no se toca, imagen exacta) ---------- */
+  .front img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* ---------- DORSO ---------- */
+  .back .card {
+    position: absolute;
+    inset: 3.2mm;
+    background: var(--crema);
+    border-radius: 4mm;
+    overflow: hidden;
+  }
+
+  /* Lienzo de contenido: 132mm x 194mm, con margen de seguridad de
+     8mm respecto del borde de la hoja (3.2mm de marco + 4.8mm extra). */
+  .back .safe {
+    position: absolute;
+    left: 4.8mm;
+    top: 4.8mm;
+    width: 132mm;
+    height: 194mm;
+  }
+  .back .safe > * { position: absolute; }
+
+  .display-font {
+    font-family: 'Baloo 2', sans-serif;
+    font-weight: 800;
+    color: var(--azul);
+    letter-spacing: 0.3px;
+  }
+
+  /* --- banner header --- */
+  .banner-wrap {
+    left: 0; top: 0;
+    width: 132mm;
+    height: 19mm;
+  }
+  .banner-burst {
+    position: absolute;
+    inset: 0;
+    background: var(--azul);
+    clip-path: polygon(
+      2% 18%, 8% 2%, 15% 16%, 22% 0%, 29% 15%, 36% 1%, 43% 17%,
+      50% 3%, 57% 17%, 64% 1%, 71% 15%, 78% 0%, 85% 16%, 92% 2%, 98% 18%,
+      100% 50%,
+      98% 82%, 92% 98%, 85% 84%, 78% 100%, 71% 85%, 64% 99%, 57% 83%,
+      50% 97%, 43% 83%, 36% 99%, 29% 85%, 22% 100%, 15% 84%, 8% 98%, 2% 82%,
+      0% 50%
+    );
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .banner-title {
+    color: var(--crema);
+    font-size: 16.5pt;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+  }
+  .banner-sub {
+    color: var(--crema);
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 8.5pt;
+    margin-top: 1.3mm;
+    text-align: center;
+  }
+
+  /* --- section title row --- */
+  .sec-title-row {
+    left: 0;
+    width: 82mm;
+    height: 5mm;
+    display: flex;
+    align-items: center;
+    gap: 1.8mm;
+  }
+  .sec-icon { font-size: 12.5pt; line-height: 1; }
+  .sec-title {
+    font-size: 12.5pt;
+    line-height: 1;
+  }
+  .sec-note {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 7.8pt;
+    color: var(--azul);
+  }
+  .hamb-title { top: 21mm; }
+  .taco-title { top: 57mm; }
+
+  /* --- boxed table --- */
+  .box {
+    left: 0;
+    width: 82mm;
+    border: 0.8mm solid var(--azul);
+    border-radius: 4mm;
+    background: var(--crema);
+    padding: 1.2mm 3.2mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .hamb-box { top: 26mm; height: 29mm; }
+  .taco-box { top: 62mm; height: 31mm; }
+
+  .row {
+    display: grid;
+    grid-template-columns: 15mm 1fr auto;
+    align-items: center;
+    column-gap: 1.5mm;
+    padding: 1.3mm 0;
+    border-bottom: 0.25mm solid rgba(27,47,181,0.3);
+  }
+  .row:last-child { border-bottom: none; }
+  .row .nombre {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 800;
+    color: var(--azul);
+    font-size: 9.5pt;
+  }
+  .row .desc {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    color: var(--azul);
+    font-size: 8pt;
+    line-height: 1.15;
+  }
+  .row .precios {
+    display: flex;
+    align-items: baseline;
+    gap: 1.3mm;
+    justify-self: end;
+    white-space: nowrap;
+  }
+  .row .precio-vieja {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    color: var(--rojo);
+    font-size: 8.5pt;
+    text-decoration: line-through;
+  }
+  .row .flecha {
+    color: var(--azul);
+    font-weight: 800;
+    font-size: 9.5pt;
+  }
+  .row .precio-nueva {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 900;
+    color: var(--azul);
+    font-size: 11pt;
+  }
+  .row .precio-unica {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 900;
+    color: var(--azul);
+    font-size: 10.5pt;
+    justify-self: end;
+    white-space: nowrap;
+  }
+
+  /* --- right column art --- */
+  .art-col {
+    left: 86mm;
+    top: 19mm;
+    width: 46mm;
+  }
+  .art-col img { width: 100%; display: block; }
+
+  .burst-col {
+    left: 92mm;
+    top: 61mm;
+    width: 32mm;
+    height: 32mm;
+  }
+  .burst-shape {
+    position: absolute;
+    inset: 0;
+    background: var(--azul);
+    clip-path: polygon(
+      50.0% 0.0%, 59.8% 13.3%, 75.0% 6.7%, 76.9% 23.1%, 93.3% 25.0%, 86.7% 40.2%,
+      100.0% 50.0%, 86.7% 59.8%, 93.3% 75.0%, 76.9% 76.9%, 75.0% 93.3%, 59.8% 86.7%,
+      50.0% 100.0%, 40.2% 86.7%, 25.0% 93.3%, 23.1% 76.9%, 6.7% 75.0%, 13.3% 59.8%,
+      0.0% 50.0%, 13.3% 40.2%, 6.7% 25.0%, 23.1% 23.1%, 25.0% 6.7%, 40.2% 13.3%
+    );
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .burst-shape .burst-text {
+    font-family: 'Baloo 2', sans-serif;
+    font-weight: 800;
+    color: var(--crema);
+    font-size: 8.5pt;
+    line-height: 1.12;
+  }
+  .burst-shape .burst-smiley {
+    color: var(--crema);
+    font-size: 9pt;
+    margin-top: 0.8mm;
+  }
+
+  /* --- promos --- */
+  .promo-box {
+    left: 0;
+    width: 132mm;
+    height: 14.5mm;
+    border: 0.8mm solid var(--azul);
+    border-radius: 4mm;
+    background: var(--crema);
+    padding: 1.5mm 4mm;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 3mm;
+  }
+  .promo1 { top: 97mm; }
+  .promo2 { top: 113.5mm; }
+  .promo-left { display: flex; flex-direction: column; justify-content: center; }
+  .promo-titulo {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 800;
+    color: var(--azul);
+    font-size: 10.5pt;
+    line-height: 1.15;
+    white-space: nowrap;
+  }
+  .promo-titulo .promo-emoji { margin-right: 1.3mm; }
+  .promo-desc {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    color: var(--azul);
+    font-size: 8pt;
+    margin-top: 0.6mm;
+    line-height: 1.2;
+  }
+  .promo-desc .promo-antes {
+    color: var(--rojo);
+    text-decoration: line-through;
+    font-weight: 700;
+  }
+  .promo-precio {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 900;
+    color: var(--azul);
+    font-size: 15pt;
+    white-space: nowrap;
+    flex: 0 0 auto;
+  }
+  .promos-caption {
+    left: 0;
+    top: 129mm;
+    width: 132mm;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 8pt;
+    color: var(--azul);
+  }
+
+  /* --- footer --- */
+  .footer-wrap {
+    left: 0;
+    top: 139mm;
+    width: 132mm;
+  }
+  .footer-band {
+    width: 132mm;
+    display: block;
+  }
+  .js-qr-holder {
+    position: absolute;
+    left: 62mm;
+    top: 9mm;
+    width: 25mm;
+    height: 25mm;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2.2mm;
+  }
+  .js-qr-holder canvas,
+  .js-qr-holder img {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+  }
+</style>
+</head>
+<body>
+
+  <!-- ================= FRENTE (idéntico al original) ================= -->
+  <div class="page front">
+    <img src="assets/front_raw.png" alt="Frente folleto Tacos Ruth">
+  </div>
+
+  <!-- ================= DORSO ================= -->
+  <div class="page back">
+    <div class="card">
+      <div class="safe">
+
+        <div class="banner-wrap">
+          <div class="banner-burst">
+            <div class="banner-title display-font">PRECIO DE LANZAMIENTO</div>
+            <div class="banner-sub js-banner-sub"></div>
+          </div>
+        </div>
+
+        <div class="sec-title-row hamb-title">
+          <span class="sec-icon">🍔</span>
+          <span class="sec-title display-font">HAMBURGUESAS</span>
+          <span class="sec-note">(incluyen papas)</span>
+        </div>
+        <div class="box hamb-box js-hamb-box"></div>
+
+        <div class="art-col">
+          <img src="assets/burger_char.png" alt="">
+        </div>
+
+        <div class="sec-title-row taco-title">
+          <span class="sec-icon">🌮</span>
+          <span class="sec-title display-font">TACOS</span>
+        </div>
+        <div class="box taco-box js-taco-box"></div>
+
+        <div class="burst-col">
+          <div class="burst-shape">
+            <div class="burst-text">MÁS<br>TACOS<br>MÁS<br>MOMENTOS</div>
+            <div class="burst-smiley">☺</div>
+          </div>
+        </div>
+
+        <div class="promo-box promo1">
+          <div class="promo-left">
+            <div class="promo-titulo"><span class="promo-emoji">🍔🍔</span><span class="js-promo1-titulo"></span></div>
+            <div class="promo-desc js-promo1-desc"></div>
+          </div>
+          <div class="promo-precio js-promo1-precio"></div>
+        </div>
+        <div class="promo-box promo2">
+          <div class="promo-left">
+            <div class="promo-titulo"><span class="promo-emoji">🌮🍔</span><span class="js-promo2-titulo"></span></div>
+            <div class="promo-desc js-promo2-desc"></div>
+          </div>
+          <div class="promo-precio js-promo2-precio"></div>
+        </div>
+        <div class="promos-caption js-promos-caption"></div>
+
+        <div class="footer-wrap">
+          <img class="footer-band" src="assets/footer_band.png" alt="">
+          <div class="js-qr-holder"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+<script src="assets/qrcode.js"></script>
+<script>
+  function el(tag, cls, text){
+    const e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text !== undefined) e.textContent = text;
+    return e;
+  }
+
+  document.querySelectorAll('.js-banner-sub').forEach(node => {
+    node.textContent = 'Válido hasta el ' + CONFIG.vigencia;
+  });
+
+  // Hamburguesas box (una copia por cada .js-hamb-box presente en el documento)
+  document.querySelectorAll('.js-hamb-box').forEach(hambBox => {
+    CONFIG.hamburguesas.forEach(h => {
+      const row = el('div','row');
+      row.appendChild(el('div','nombre', h.nombre));
+      row.appendChild(el('div','desc', ''));
+      const precios = el('div','precios');
+      precios.appendChild(el('span','precio-vieja', h.antes));
+      precios.appendChild(el('span','flecha','→'));
+      precios.appendChild(el('span','precio-nueva', h.ahora));
+      row.appendChild(precios);
+      hambBox.appendChild(row);
+    });
+  });
+
+  // Tacos box (precio único, sin tachado)
+  document.querySelectorAll('.js-taco-box').forEach(tacoBox => {
+    CONFIG.tacos.forEach(t => {
+      const row = el('div','row taco-row');
+      row.appendChild(el('div','nombre', t.nombre));
+      row.appendChild(el('div','desc', t.desc));
+      row.appendChild(el('div','precio-unica', t.precio));
+      tacoBox.appendChild(row);
+    });
+  });
+
+  // Promos
+  document.querySelectorAll('.js-promo1-titulo').forEach(n => n.textContent = CONFIG.promo1.titulo);
+  document.querySelectorAll('.js-promo1-desc').forEach(n => n.innerHTML = CONFIG.promo1.desc + ' · <span class="promo-antes">Antes ' + CONFIG.promo1.antes + '</span>');
+  document.querySelectorAll('.js-promo1-precio').forEach(n => n.textContent = CONFIG.promo1.precio);
+
+  document.querySelectorAll('.js-promo2-titulo').forEach(n => n.textContent = CONFIG.promo2.titulo);
+  document.querySelectorAll('.js-promo2-desc').forEach(n => n.innerHTML = CONFIG.promo2.desc + ' · <span class="promo-antes">Antes ' + CONFIG.promo2.antes + '</span>');
+  document.querySelectorAll('.js-promo2-precio').forEach(n => n.textContent = CONFIG.promo2.precio);
+
+  document.querySelectorAll('.js-promos-caption').forEach(n => n.textContent = 'Promos válidas hasta el ' + CONFIG.vigencia);
+
+  // QR code — generado local con qrcode.js, sin servicio online (una instancia por cada holder)
+  document.querySelectorAll('.js-qr-holder').forEach(qrHolder => {
+    new QRCode(qrHolder, {
+      text: CONFIG.qrUrl,
+      width: 600,
+      height: 600,
+      colorDark: "#000000",
+      colorLight: "#ffffff",
+      correctLevel: QRCode.CorrectLevel.H
+    });
+  });
+</script>
+</body>
+</html>
