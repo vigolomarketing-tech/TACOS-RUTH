@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Tacos Ruth — Delivery de tacos en Longchamps</title>
-<meta name="description" content="Tacos de ternera y papas fritas con onda casera. Pedí por WhatsApp, delivery en Longchamps y Glew, miércoles a domingos de 19:30 a 00:00.">
+<title>Tacos Ruth — Delivery de tacos y hamburguesas en Longchamps</title>
+<meta name="description" content="Tacos de ternera y hamburguesas caseras con papas fritas. Pedí por WhatsApp, delivery en Longchamps y Glew, miércoles a domingos de 19:30 a 00:00.">
 
 <meta property="og:type" content="website">
 <meta property="og:title" content="Tacos Ruth — Más que tacos">
-<meta property="og:description" content="Tacos de ternera y papas fritas con onda casera. Pedí por WhatsApp, delivery en Longchamps y Glew.">
+<meta property="og:description" content="Tacos de ternera y hamburguesas caseras con papas fritas. Pedí por WhatsApp, delivery en Longchamps y Glew.">
 <meta property="og:image" content="assets/logo.png">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="assets/logo.png" type="image/png">
@@ -137,7 +137,49 @@
     .infobar .wrap{ flex-direction:row; justify-content:center; flex-wrap:wrap; gap: 26px; }
   }
 
-  /* ---------- MENU ---------- */
+  /* ---------- PROMOS ---------- */
+  .promos-section{
+    background: var(--blue);
+    padding: 40px 0 46px;
+    position:relative;
+  }
+  .promos-cartel{
+    display:block;
+    width:fit-content;
+    text-align:center;
+    color: var(--blue-dark);
+    background: #FFDE7A;
+    font-weight:800;
+    font-size: 12.5px;
+    letter-spacing:.3px;
+    padding: 8px 16px;
+    border-radius: 999px;
+    margin: 0 auto 18px;
+  }
+  .promos-title{
+    color: var(--cream);
+    text-align:center;
+    font-size: clamp(30px, 8vw, 42px);
+    margin: 0 0 6px;
+  }
+  .promos-subtitle{
+    color: #cdd3f2;
+    text-align:center;
+    font-size: 14.5px;
+    margin: 0 0 8px;
+  }
+  .promos-subtitle strong{ color: var(--cream); }
+  .promos-grid{ margin-top: 28px; }
+
+  .card--promo{
+    border: 2px solid var(--cream);
+  }
+  .card--promo .card__body{ padding: 24px 22px 26px; }
+  .card--promo .card__name{ font-size: 27px; }
+  .card--promo .card__desc{ font-size: 15.5px; }
+  .card--promo .card__price{ font-size: 21px; padding: 9px 16px; }
+
+  /* ---------- MENU (hamburguesas / tacos) ---------- */
   .menu-section{
     background: var(--black);
     padding: 48px 0 56px;
@@ -162,13 +204,14 @@
   }
   .menu-subtitle strong{ color: var(--cream); }
 
-  .menu-grid{
+  .grid-3{
     display:flex;
     flex-direction:column;
     gap: 22px;
   }
 
   .card{
+    position:relative;
     background: var(--black-card);
     border-radius: var(--radius);
     overflow:hidden;
@@ -178,12 +221,45 @@
     flex-direction:column;
     height: 100%;
   }
+  .card__badge{
+    position:absolute;
+    top:12px;
+    right:12px;
+    background:#FF6A3D;
+    color:#fff;
+    font-family:'Anton', sans-serif;
+    font-size:11.5px;
+    letter-spacing:.5px;
+    padding:5px 10px;
+    border-radius:999px;
+    z-index:2;
+    box-shadow:0 4px 10px rgba(0,0,0,.3);
+  }
   .card__img-wrap{
     aspect-ratio: 1 / 1;
     overflow:hidden;
     background: #222;
   }
   .card__img-wrap img{ width:100%; height:100%; object-fit:cover; }
+  .card__img-wrap--placeholder{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    background: linear-gradient(135deg, var(--blue) 0%, var(--blue-dark) 60%, #0c1568 100%);
+    color: var(--cream);
+    text-align:center;
+    padding: 16px;
+  }
+  .placeholder-emoji{ font-size: 46px; line-height:1; filter: drop-shadow(0 4px 10px rgba(0,0,0,.35)); }
+  .placeholder-label{
+    font-family:'Anton', sans-serif;
+    font-size: 12.5px;
+    letter-spacing:.4px;
+    text-transform: uppercase;
+    opacity:.85;
+  }
   .card__body{
     padding: 18px 18px 20px;
     display:flex;
@@ -214,6 +290,13 @@
     justify-content:space-between;
     gap: 12px;
     margin-top: 18px;
+  }
+  .card__price-wrap{ display:inline-flex; align-items:baseline; gap:6px; flex-wrap:wrap; }
+  .card__price-old{
+    color: #9a9488;
+    text-decoration: line-through;
+    font-size: 13.5px;
+    font-weight:600;
   }
   .card__price{
     font-family:'Anton', sans-serif;
@@ -410,6 +493,16 @@
     border-color: var(--blue);
   }
 
+  .field.pago-sub{ margin-top: 10px; }
+  .pago-nota{
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--blue);
+    background: rgba(27,47,181,.08);
+    border-radius: 10px;
+    padding: 10px 12px;
+  }
+
   .send-btn{
     width:100%;
     margin-top: 20px;
@@ -486,7 +579,7 @@
   }
 
   @media (min-width: 720px){
-    .menu-grid{
+    .grid-3{
       display:grid;
       grid-template-columns: repeat(3, 1fr);
     }
@@ -501,7 +594,7 @@
   <img class="logo" src="assets/logo.png" alt="Tacos Ruth — Más que tacos">
   <p class="hero__claim">Tacos que sí saben a casa</p>
   <div class="hero__ctas">
-    <a href="#menu" class="btn btn--solid">Ver menú</a>
+    <a href="#promos" class="btn btn--solid">Ver menú</a>
     <a id="heroWhatsapp" href="https://wa.me/5491132870962" target="_blank" rel="noopener" class="btn btn--outline">Pedir por WhatsApp</a>
   </div>
 </section>
@@ -509,6 +602,17 @@
 <div id="closedBanner" class="closed-banner">
   🌙 Ahora estamos cerrados — igual dejanos tu pedido y te confirmamos apenas abramos
 </div>
+
+<!-- ================= PROMOS ================= -->
+<section class="promos-section" id="promos">
+  <div class="wrap" style="max-width:960px;">
+    <p class="promos-cartel" id="promosCartel"></p>
+    <h2 class="condensed promos-title">🔥 Promos</h2>
+    <p class="promos-subtitle">Las mejores combinaciones, a un precio que <strong>no se repite</strong></p>
+
+    <div class="grid-3 promos-grid" id="promosGrid"></div>
+  </div>
+</section>
 
 <!-- ================= INFO BAR ================= -->
 <div class="infobar">
@@ -519,14 +623,25 @@
   </div>
 </div>
 
-<!-- ================= MENU ================= -->
-<section class="menu-section" id="menu">
+<!-- ================= HAMBURGUESAS ================= -->
+<section class="menu-section" id="hamburguesas">
   <div class="zigzag" aria-hidden="true"></div>
   <div class="wrap" style="max-width:960px;">
-    <h2 class="condensed menu-title">Nuestro menú</h2>
+    <h2 class="condensed menu-title">Hamburguesas</h2>
+    <p class="menu-subtitle">Medallones caseros con <strong>papas fritas</strong> incluidas 🍟</p>
+
+    <div class="grid-3" id="burgersGrid"></div>
+  </div>
+</section>
+
+<!-- ================= TACOS ================= -->
+<section class="menu-section" id="tacos">
+  <div class="zigzag" aria-hidden="true"></div>
+  <div class="wrap" style="max-width:960px;">
+    <h2 class="condensed menu-title">Tacos</h2>
     <p class="menu-subtitle">Todo hecho con <strong>carne de ternera desmenuzada</strong> y buena onda 🌮</p>
 
-    <div class="menu-grid" id="menuGrid"></div>
+    <div class="grid-3" id="tacosGrid"></div>
   </div>
 </section>
 
@@ -584,6 +699,21 @@
   </div>
 
   <div class="field">
+    <label>Método de pago</label>
+    <div class="toggle">
+      <input type="radio" name="pago" id="pagoEfectivo" value="Efectivo">
+      <label for="pagoEfectivo">💵 Efectivo</label>
+      <input type="radio" name="pago" id="pagoTransferencia" value="Transferencia">
+      <label for="pagoTransferencia">🏦 Transferencia</label>
+    </div>
+    <div class="field pago-sub" id="efectivoField" style="display:none;">
+      <label for="cambioInput">¿Con cuánto pagás? (opcional)</label>
+      <input type="text" id="cambioInput" inputmode="numeric" placeholder="Ej: 50000, para llevar el cambio justo">
+    </div>
+    <p class="pago-nota" id="transferenciaNota" style="display:none;">Te pasamos los datos por WhatsApp al confirmar el pedido.</p>
+  </div>
+
+  <div class="field">
     <label for="notasInput">Aclaraciones</label>
     <textarea id="notasInput" placeholder="Sin cebolla, sin picante, etc. (opcional)"></textarea>
   </div>
@@ -597,32 +727,138 @@
 
   var WHATSAPP_NUMBER = "5491132870962";
 
-  var PRODUCTS = [
+  // ====================================================================
+  // CONFIG — precios y switch de promociones.
+  // Cambiá estos valores para actualizar precios, desactivar el
+  // lanzamiento o mover la fecha límite, sin tocar el diseño ni la
+  // lógica de más abajo.
+  // ====================================================================
+  var PROMO_ACTIVA = true;
+  var PROMOS_VIGENCIA = "31 de octubre de 2026";
+
+  var PRECIOS_HAMBURGUESAS = {
+    simple: { normal: 12500, promo: 10000 },
+    doble:  { normal: 15000, promo: 12000 },
+    triple: { normal: 18000, promo: 15000 }
+  };
+
+  var PRECIOS_PROMOS = {
+    dosDobles:       { precio: 25000, antes: 30000 },
+    tresSimples:     { precio: 25000, antes: 37500 },
+    comboTacoBurger: { precio: 26000, antes: 30000 }
+  };
+
+  var PRECIOS_TACOS = {
+    menu1: 15000,
+    menu2: 20000,
+    menu3: 15000
+  };
+  // ====================================================================
+  // FIN CONFIG
+  // ====================================================================
+
+  function precioHamburguesa(key){
+    var p = PRECIOS_HAMBURGUESAS[key];
+    return PROMO_ACTIVA ? p.promo : p.normal;
+  }
+  function precioNormalHamburguesa(key){
+    return PROMO_ACTIVA ? PRECIOS_HAMBURGUESAS[key].normal : null;
+  }
+
+  var PRODUCTS_PROMOS = !PROMO_ACTIVA ? [] : [
     {
-      id: 1,
-      nombre: "MENÚ 1",
-      desc: "3 tacos de ternera con papas fritas",
-      dip: "Dips de acompañamiento",
-      precio: 15000,
-      img: "assets/menu-1.jpg"
+      id: "promo-2dobles",
+      nombre: "2x Hamburguesas Dobles",
+      desc: "2 hamburguesas dobles (2 medallones c/u) con papas fritas",
+      precio: PRECIOS_PROMOS.dosDobles.precio,
+      precioNormal: PRECIOS_PROMOS.dosDobles.antes,
+      categoria: "promos"
     },
     {
-      id: 2,
-      nombre: "MENÚ 2",
-      desc: "5 tacos de ternera",
-      dip: "Dips de acompañamiento",
-      precio: 20000,
-      img: "assets/menu-2.jpg"
+      id: "promo-3simples",
+      nombre: "3x Hamburguesas Simples",
+      desc: "3 hamburguesas simples (1 medallón c/u) con papas fritas",
+      precio: PRECIOS_PROMOS.tresSimples.precio,
+      precioNormal: PRECIOS_PROMOS.tresSimples.antes,
+      categoria: "promos"
     },
     {
-      id: 3,
-      nombre: "MENÚ 3",
-      desc: "Bandeja de papas fritas con carne de ternera desmenuzada",
-      dip: "Dip de acompañante (salsa picante)",
-      precio: 15000,
-      img: "assets/menu-3.jpg"
+      id: "promo-combo",
+      nombre: "Combo Taco y Burger",
+      desc: "1 hamburguesa doble con papas + 3 tacos con papas",
+      precio: PRECIOS_PROMOS.comboTacoBurger.precio,
+      precioNormal: PRECIOS_PROMOS.comboTacoBurger.antes,
+      categoria: "promos"
     }
   ];
+
+  var PRODUCTS_HAMBURGUESAS = [
+    {
+      id: "burger-simple",
+      nombre: "Hamburguesa Simple",
+      desc: "1 medallón de 100g, cheddar, papas fritas",
+      precio: precioHamburguesa("simple"),
+      precioNormal: precioNormalHamburguesa("simple"),
+      badge: PROMO_ACTIVA,
+      // TODO: cuando esté la foto real, reemplazar por: img: "assets/hamburguesa-simple.jpg"
+      placeholder: { emoji: "🍔", key: "hamburguesa-simple" },
+      categoria: "hamburguesas"
+    },
+    {
+      id: "burger-doble",
+      nombre: "Hamburguesa Doble",
+      desc: "2 medallones de 100g, doble cheddar, papas fritas",
+      precio: precioHamburguesa("doble"),
+      precioNormal: precioNormalHamburguesa("doble"),
+      badge: PROMO_ACTIVA,
+      // TODO: cuando esté la foto real, reemplazar por: img: "assets/hamburguesa-doble.jpg"
+      placeholder: { emoji: "🍔🍔", key: "hamburguesa-doble" },
+      categoria: "hamburguesas"
+    },
+    {
+      id: "burger-triple",
+      nombre: "Hamburguesa Triple",
+      desc: "3 medallones de 100g, triple cheddar, papas fritas",
+      precio: precioHamburguesa("triple"),
+      precioNormal: precioNormalHamburguesa("triple"),
+      badge: PROMO_ACTIVA,
+      // TODO: cuando esté la foto real, reemplazar por: img: "assets/hamburguesa-triple.jpg"
+      placeholder: { emoji: "🍔🍔🍔", key: "hamburguesa-triple" },
+      categoria: "hamburguesas"
+    }
+  ];
+
+  var PRODUCTS_TACOS = [
+    {
+      id: "menu1",
+      nombre: "Menú 1",
+      desc: "3 tacos de ternera con papas fritas",
+      dip: "Dips de acompañamiento",
+      precio: PRECIOS_TACOS.menu1,
+      img: "assets/menu-1.jpg",
+      categoria: "tacos"
+    },
+    {
+      id: "menu2",
+      nombre: "Menú 2",
+      desc: "5 tacos de ternera",
+      dip: "Dips de acompañamiento",
+      precio: PRECIOS_TACOS.menu2,
+      img: "assets/menu-2.jpg",
+      categoria: "tacos"
+    },
+    {
+      id: "menu3",
+      nombre: "Menú 3",
+      desc: "Bandeja de papas fritas con carne de ternera desmenuzada",
+      dip: "Dip de acompañante (salsa picante)",
+      precio: PRECIOS_TACOS.menu3,
+      img: "assets/menu-3.jpg",
+      categoria: "tacos"
+    }
+  ];
+
+  var ALL_PRODUCTS = PRODUCTS_PROMOS.concat(PRODUCTS_HAMBURGUESAS, PRODUCTS_TACOS);
 
   var cart = {}; // { id: qty }
 
@@ -630,11 +866,14 @@
     return "$" + n.toLocaleString("es-AR");
   }
 
+  function findProduct(id){
+    return ALL_PRODUCTS.find(function(p){ return p.id === id; });
+  }
+
   function cartTotal(){
     var total = 0;
     Object.keys(cart).forEach(function(id){
-      var p = PRODUCTS.find(function(p){ return p.id == id; });
-      total += p.precio * cart[id];
+      total += findProduct(id).precio * cart[id];
     });
     return total;
   }
@@ -644,23 +883,54 @@
   }
 
   // ---------- Render menú ----------
-  var menuGrid = document.getElementById("menuGrid");
+  var promosGrid = document.getElementById("promosGrid");
+  var burgersGrid = document.getElementById("burgersGrid");
+  var tacosGrid = document.getElementById("tacosGrid");
 
-  function renderMenu(){
-    menuGrid.innerHTML = "";
-    PRODUCTS.forEach(function(p){
+  document.getElementById("promos").style.display = PROMO_ACTIVA ? "" : "none";
+  document.getElementById("promosCartel").textContent = "PRECIOS DE LANZAMIENTO — válidos hasta el " + PROMOS_VIGENCIA;
+
+  function cardImgHtml(p){
+    if(p.placeholder){
+      return '<div class="card__img-wrap card__img-wrap--placeholder" data-placeholder="' + p.placeholder.key + '">' +
+        '<span class="placeholder-emoji" aria-hidden="true">' + p.placeholder.emoji + '</span>' +
+        '<span class="placeholder-label">' + p.nombre + '</span>' +
+      '</div>';
+    }
+    if(p.img){
+      return '<div class="card__img-wrap"><img src="' + p.img + '" alt="' + p.nombre + '" loading="lazy"></div>';
+    }
+    return "";
+  }
+
+  function cardPriceHtml(p){
+    if(p.precioNormal && p.precioNormal > p.precio){
+      return '<span class="card__price-old">' + formatPrice(p.precioNormal) + '</span>' +
+             '<span class="card__price">' + formatPrice(p.precio) + '</span>';
+    }
+    return '<span class="card__price">' + formatPrice(p.precio) + '</span>';
+  }
+
+  function cardBadgeHtml(p){
+    return p.badge ? '<span class="card__badge">PROMO</span>' : '';
+  }
+
+  function renderGrid(containerEl, products, extraClass){
+    containerEl.innerHTML = "";
+    products.forEach(function(p){
       var qty = cart[p.id] || 0;
       var card = document.createElement("div");
-      card.className = "card" + (qty > 0 ? " has-qty" : "");
+      card.className = "card" + (extraClass ? " " + extraClass : "") + (qty > 0 ? " has-qty" : "");
       card.id = "card-" + p.id;
       card.innerHTML =
-        '<div class="card__img-wrap"><img src="' + p.img + '" alt="' + p.nombre + '" loading="lazy"></div>' +
+        cardImgHtml(p) +
         '<div class="card__body">' +
+          cardBadgeHtml(p) +
           '<h3 class="condensed card__name">' + p.nombre + '</h3>' +
           '<p class="card__desc">' + p.desc + '</p>' +
-          '<p class="card__dip">' + p.dip + '</p>' +
+          (p.dip ? '<p class="card__dip">' + p.dip + '</p>' : '') +
           '<div class="card__footer">' +
-            '<span class="card__price">' + formatPrice(p.precio) + '</span>' +
+            '<span class="card__price-wrap">' + cardPriceHtml(p) + '</span>' +
             '<div class="qty">' +
               '<button type="button" data-action="dec" data-id="' + p.id + '" aria-label="Quitar">–</button>' +
               '<span class="qty__num" id="qty-' + p.id + '">' + qty + '</span>' +
@@ -668,14 +938,28 @@
             '</div>' +
           '</div>' +
         '</div>';
-      menuGrid.appendChild(card);
+      containerEl.appendChild(card);
     });
   }
 
-  menuGrid.addEventListener("click", function(e){
+  function renderAllGrids(){
+    renderGrid(promosGrid, PRODUCTS_PROMOS, "card--promo");
+    renderGrid(burgersGrid, PRODUCTS_HAMBURGUESAS, "");
+    renderGrid(tacosGrid, PRODUCTS_TACOS, "");
+  }
+
+  function pulseCard(id){
+    var card = document.getElementById("card-" + id);
+    if(!card) return;
+    card.classList.remove("pulse");
+    void card.offsetWidth;
+    card.classList.add("pulse");
+  }
+
+  function onGridClick(e){
     var btn = e.target.closest("button[data-action]");
     if(!btn) return;
-    var id = Number(btn.dataset.id);
+    var id = btn.dataset.id;
     var action = btn.dataset.action;
     var current = cart[id] || 0;
 
@@ -686,15 +970,14 @@
       if(cart[id] === 0) delete cart[id];
     }
 
-    document.getElementById("qty-" + id).textContent = cart[id] || 0;
-    var card = document.getElementById("card-" + id);
-    card.classList.toggle("has-qty", !!cart[id]);
-    card.classList.remove("pulse");
-    void card.offsetWidth;
-    card.classList.add("pulse");
-
+    renderAllGrids();
+    pulseCard(id);
     updateCartUI();
-  });
+  }
+
+  promosGrid.addEventListener("click", onGridClick);
+  burgersGrid.addEventListener("click", onGridClick);
+  tacosGrid.addEventListener("click", onGridClick);
 
   // ---------- Carrito flotante + panel ----------
   var cartFab = document.getElementById("cartFab");
@@ -709,6 +992,11 @@
   var direccionInput = document.getElementById("direccionInput");
   var direccionField = document.getElementById("direccionField");
   var notasInput = document.getElementById("notasInput");
+  var pagoEfectivo = document.getElementById("pagoEfectivo");
+  var pagoTransferencia = document.getElementById("pagoTransferencia");
+  var efectivoField = document.getElementById("efectivoField");
+  var transferenciaNota = document.getElementById("transferenciaNota");
+  var cambioInput = document.getElementById("cambioInput");
 
   function updateCartUI(){
     var count = cartCount();
@@ -724,7 +1012,7 @@
       cartItemsEl.innerHTML = '<p class="cart-empty">Todavía no agregaste nada del menú 🌮</p>';
     } else {
       Object.keys(cart).forEach(function(id){
-        var p = PRODUCTS.find(function(p){ return p.id == id; });
+        var p = findProduct(id);
         var qty = cart[id];
         var row = document.createElement("div");
         row.className = "cart-item";
@@ -748,7 +1036,7 @@
   cartItemsEl.addEventListener("click", function(e){
     var btn = e.target.closest("button[data-action]");
     if(!btn) return;
-    var id = Number(btn.dataset.id);
+    var id = btn.dataset.id;
     var action = btn.dataset.action;
     var current = cart[id] || 0;
 
@@ -759,7 +1047,8 @@
       if(cart[id] === 0) delete cart[id];
     }
 
-    renderMenu();
+    renderAllGrids();
+    pulseCard(id);
     updateCartUI();
   });
 
@@ -787,6 +1076,14 @@
     });
   });
 
+  document.querySelectorAll('input[name="pago"]').forEach(function(radio){
+    radio.addEventListener("change", function(){
+      efectivoField.style.display = pagoEfectivo.checked ? "" : "none";
+      transferenciaNota.style.display = pagoTransferencia.checked ? "" : "none";
+      validateForm();
+    });
+  });
+
   nombreInput.addEventListener("input", validateForm);
   direccionInput.addEventListener("input", validateForm);
 
@@ -794,7 +1091,25 @@
     var hasItems = cartCount() > 0;
     var hasNombre = nombreInput.value.trim().length > 0;
     var hasDireccion = !isDelivery() || direccionInput.value.trim().length > 0;
-    sendBtn.disabled = !(hasItems && hasNombre && hasDireccion);
+    var hasPago = pagoEfectivo.checked || pagoTransferencia.checked;
+    sendBtn.disabled = !(hasItems && hasNombre && hasDireccion && hasPago);
+  }
+
+  function formatCambio(raw){
+    var digits = raw.replace(/[^\d]/g, "");
+    if(!digits) return raw.trim();
+    return formatPrice(Number(digits));
+  }
+
+  function pagoLine(){
+    if(pagoEfectivo.checked){
+      var cambio = cambioInput.value.trim();
+      return cambio ? "Pago: Efectivo (paga con " + formatCambio(cambio) + ")" : "Pago: Efectivo";
+    }
+    if(pagoTransferencia.checked){
+      return "Pago: Transferencia";
+    }
+    return "";
   }
 
   function buildWhatsappUrl(){
@@ -802,7 +1117,7 @@
     lines.push("*NUEVO PEDIDO - TACOS RUTH*");
     lines.push("---");
     Object.keys(cart).forEach(function(id){
-      var p = PRODUCTS.find(function(p){ return p.id == id; });
+      var p = findProduct(id);
       var qty = cart[id];
       lines.push(qty + "x " + p.nombre + " — " + formatPrice(p.precio * qty));
     });
@@ -814,6 +1129,7 @@
     if(isDelivery()){
       lines.push("Dirección: " + direccionInput.value.trim());
     }
+    lines.push(pagoLine());
     if(notasInput.value.trim()){
       lines.push("Aclaraciones: " + notasInput.value.trim());
     }
@@ -842,7 +1158,7 @@
   checkOpen();
   setInterval(checkOpen, 60000);
 
-  renderMenu();
+  renderAllGrids();
   updateCartUI();
 })();
 </script>
