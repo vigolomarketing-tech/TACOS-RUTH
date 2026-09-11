@@ -9,16 +9,29 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="Tacos Ruth — Más que tacos">
 <meta property="og:description" content="Tacos de ternera y hamburguesas caseras con papas fritas. Pedí por WhatsApp, delivery en Longchamps y Glew.">
-<meta property="og:image" content="assets/logo.png">
+<meta property="og:image" content="assets/logo-circular.png">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="assets/logo.png" type="image/png">
-<link rel="apple-touch-icon" href="assets/logo.png">
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" href="assets/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="assets/favicon-16.png" sizes="16x16" type="image/png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 
 <style>
+  /* Fuentes hospedadas localmente en /fonts (sin depender de Google Fonts) */
+  @font-face{
+    font-family: 'Anton';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('fonts/anton-400.woff2') format('woff2');
+  }
+  @font-face{
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400 800;
+    font-display: swap;
+    src: url('fonts/inter-variable.woff2') format('woff2-variations'), url('fonts/inter-variable.woff2') format('woff2');
+  }
+
   :root{
     --blue: #1B2FB5;
     --blue-dark: #131f80;
@@ -41,6 +54,8 @@
     padding-bottom: 90px; /* espacio para carrito flotante */
   }
   img{ max-width:100%; display:block; }
+  picture{ display:block; }
+  .card__img-wrap picture{ height:100%; }
   .condensed{
     font-family:'Anton', sans-serif;
     letter-spacing: .5px;
@@ -310,24 +325,25 @@
   .qty{
     display:flex;
     align-items:center;
-    gap: 12px;
+    gap: 8px;
     background: rgba(245,235,220,.08);
     border-radius: 999px;
-    padding: 6px 8px;
+    padding: 4px;
   }
   .qty button{
-    width: 30px;
-    height: 30px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     border: none;
     background: var(--cream);
     color: var(--black);
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 800;
     display:flex;
     align-items:center;
     justify-content:center;
     line-height:1;
+    flex-shrink:0;
   }
   .qty button:disabled{ opacity:.35; }
   .qty__num{
@@ -365,10 +381,13 @@
     font-weight: 700;
     font-size: 15px;
     z-index: 40;
-    transform: translateY(120%);
-    transition: transform .25s ease;
   }
-  .cart-fab.show{ transform: translateY(0); }
+  .cart-fab.bump{ animation: fabBump .3s ease; }
+  @keyframes fabBump{
+    0%{ transform: scale(1); }
+    40%{ transform: scale(1.05); box-shadow: 0 0 0 6px rgba(255,255,255,.15), 0 10px 24px rgba(0,0,0,.35); }
+    100%{ transform: scale(1); }
+  }
   .cart-fab__count{
     background: var(--cream);
     color: var(--blue);
@@ -476,8 +495,12 @@
   }
   .toggle label{
     flex:1;
+    min-height: 44px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
     text-align:center;
-    padding: 11px 10px;
+    padding: 8px 10px;
     border-radius: 12px;
     border: 1.5px solid rgba(27,47,181,.3);
     font-weight: 700;
@@ -525,12 +548,16 @@
   }
   .close-panel{
     position:absolute;
-    top: 16px; right: 16px;
+    top: 8px; right: 8px;
+    width: 44px;
+    height: 44px;
     background:none; border:none;
-    font-size: 22px;
+    font-size: 20px;
     color: var(--blue);
     line-height:1;
-    padding: 4px 8px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
   }
 
   /* ---------- FOOTER ---------- */
@@ -571,6 +598,9 @@
     border: 2px solid var(--blue);
     padding: 9px 16px;
     border-radius: 999px;
+    min-height: 44px;
+    display:inline-flex;
+    align-items:center;
   }
   footer .copy{
     margin-top: 26px;
@@ -591,7 +621,10 @@
 <!-- ================= HERO ================= -->
 <section class="hero">
   <div class="hero__sparks" aria-hidden="true">✦ ✧ ✦</div>
-  <img class="logo" src="assets/logo.png" alt="Tacos Ruth — Más que tacos">
+  <picture>
+    <source srcset="assets/logo-hero.webp" type="image/webp">
+    <img class="logo" src="assets/logo-hero.png" alt="Tacos Ruth — Más que tacos" width="760" height="760" fetchpriority="high">
+  </picture>
   <p class="hero__claim">Tacos que sí saben a casa</p>
   <div class="hero__ctas">
     <a href="#promos" class="btn btn--solid">Ver menú</a>
@@ -647,7 +680,10 @@
 
 <!-- ================= FOOTER ================= -->
 <footer>
-  <img class="logo-mini" src="assets/logo.png" alt="Tacos Ruth">
+  <picture>
+    <source srcset="assets/logo-circular.webp" type="image/webp">
+    <img class="logo-mini" src="assets/logo-circular.png" alt="Tacos Ruth" loading="lazy" width="128" height="128">
+  </picture>
   <h3>Tacos Ruth</h3>
   <p>🕐 Miércoles a domingos de 19:30 a 00:00</p>
   <p>📍 Delivery en Longchamps y Glew, Buenos Aires</p>
@@ -772,6 +808,9 @@
       desc: "2 hamburguesas dobles (2 medallones c/u) con papas fritas",
       precio: PRECIOS_PROMOS.dosDobles.precio,
       precioNormal: PRECIOS_PROMOS.dosDobles.antes,
+      // TODO: cuando esté la foto real, reemplazar por:
+      // photo: { jpg: "assets/promo-2x-dobles.jpg", webp: "assets/promo-2x-dobles.webp" }
+      placeholder: { emoji: "🍔🍔", key: "promo-2x-dobles" },
       categoria: "promos"
     },
     {
@@ -780,6 +819,9 @@
       desc: "3 hamburguesas simples (1 medallón c/u) con papas fritas",
       precio: PRECIOS_PROMOS.tresSimples.precio,
       precioNormal: PRECIOS_PROMOS.tresSimples.antes,
+      // TODO: cuando esté la foto real, reemplazar por:
+      // photo: { jpg: "assets/promo-3x-simples.jpg", webp: "assets/promo-3x-simples.webp" }
+      placeholder: { emoji: "🍔🍔🍔", key: "promo-3x-simples" },
       categoria: "promos"
     },
     {
@@ -788,6 +830,7 @@
       desc: "1 hamburguesa doble con papas + 3 tacos con papas",
       precio: PRECIOS_PROMOS.comboTacoBurger.precio,
       precioNormal: PRECIOS_PROMOS.comboTacoBurger.antes,
+      photo: { jpg: "assets/promo-combo-taco-burger.jpg", webp: "assets/promo-combo-taco-burger.webp" },
       categoria: "promos"
     }
   ];
@@ -800,8 +843,7 @@
       precio: precioHamburguesa("simple"),
       precioNormal: precioNormalHamburguesa("simple"),
       badge: PROMO_ACTIVA,
-      // TODO: cuando esté la foto real, reemplazar por: img: "assets/hamburguesa-simple.jpg"
-      placeholder: { emoji: "🍔", key: "hamburguesa-simple" },
+      photo: { jpg: "assets/hamburguesa-simple.jpg", webp: "assets/hamburguesa-simple.webp" },
       categoria: "hamburguesas"
     },
     {
@@ -811,8 +853,7 @@
       precio: precioHamburguesa("doble"),
       precioNormal: precioNormalHamburguesa("doble"),
       badge: PROMO_ACTIVA,
-      // TODO: cuando esté la foto real, reemplazar por: img: "assets/hamburguesa-doble.jpg"
-      placeholder: { emoji: "🍔🍔", key: "hamburguesa-doble" },
+      photo: { jpg: "assets/hamburguesa-doble.jpg", webp: "assets/hamburguesa-doble.webp" },
       categoria: "hamburguesas"
     },
     {
@@ -822,7 +863,8 @@
       precio: precioHamburguesa("triple"),
       precioNormal: precioNormalHamburguesa("triple"),
       badge: PROMO_ACTIVA,
-      // TODO: cuando esté la foto real, reemplazar por: img: "assets/hamburguesa-triple.jpg"
+      // TODO: cuando esté la foto real, reemplazar por:
+      // photo: { jpg: "assets/hamburguesa-triple.jpg", webp: "assets/hamburguesa-triple.webp" }
       placeholder: { emoji: "🍔🍔🍔", key: "hamburguesa-triple" },
       categoria: "hamburguesas"
     }
@@ -835,7 +877,7 @@
       desc: "3 tacos de ternera con papas fritas",
       dip: "Dips de acompañamiento",
       precio: PRECIOS_TACOS.menu1,
-      img: "assets/menu-1.jpg",
+      photo: { jpg: "assets/menu-1.jpg", webp: "assets/menu-1.webp" },
       categoria: "tacos"
     },
     {
@@ -844,7 +886,7 @@
       desc: "5 tacos de ternera",
       dip: "Dips de acompañamiento",
       precio: PRECIOS_TACOS.menu2,
-      img: "assets/menu-2.jpg",
+      photo: { jpg: "assets/menu-2.jpg", webp: "assets/menu-2.webp" },
       categoria: "tacos"
     },
     {
@@ -853,7 +895,7 @@
       desc: "Bandeja de papas fritas con carne de ternera desmenuzada",
       dip: "Dip de acompañante (salsa picante)",
       precio: PRECIOS_TACOS.menu3,
-      img: "assets/menu-3.jpg",
+      photo: { jpg: "assets/menu-3.jpg", webp: "assets/menu-3.webp" },
       categoria: "tacos"
     }
   ];
@@ -888,17 +930,20 @@
   var tacosGrid = document.getElementById("tacosGrid");
 
   document.getElementById("promos").style.display = PROMO_ACTIVA ? "" : "none";
-  document.getElementById("promosCartel").textContent = "PRECIOS DE LANZAMIENTO — válidos hasta el " + PROMOS_VIGENCIA;
+  document.getElementById("promosCartel").textContent = "PRECIOS DE LANZAMIENTO — hasta el " + PROMOS_VIGENCIA;
 
   function cardImgHtml(p){
+    if(p.photo){
+      return '<div class="card__img-wrap"><picture>' +
+        '<source srcset="' + p.photo.webp + '" type="image/webp">' +
+        '<img src="' + p.photo.jpg + '" alt="' + p.nombre + '" loading="lazy" width="900" height="900">' +
+      '</picture></div>';
+    }
     if(p.placeholder){
       return '<div class="card__img-wrap card__img-wrap--placeholder" data-placeholder="' + p.placeholder.key + '">' +
         '<span class="placeholder-emoji" aria-hidden="true">' + p.placeholder.emoji + '</span>' +
         '<span class="placeholder-label">' + p.nombre + '</span>' +
       '</div>';
-    }
-    if(p.img){
-      return '<div class="card__img-wrap"><img src="' + p.img + '" alt="' + p.nombre + '" loading="lazy"></div>';
     }
     return "";
   }
@@ -956,6 +1001,12 @@
     card.classList.add("pulse");
   }
 
+  function bumpFab(){
+    cartFab.classList.remove("bump");
+    void cartFab.offsetWidth;
+    cartFab.classList.add("bump");
+  }
+
   function onGridClick(e){
     var btn = e.target.closest("button[data-action]");
     if(!btn) return;
@@ -972,6 +1023,7 @@
 
     renderAllGrids();
     pulseCard(id);
+    bumpFab();
     updateCartUI();
   }
 
@@ -1005,7 +1057,6 @@
     cartCountEl.textContent = count;
     cartFabTotalEl.textContent = formatPrice(total);
     cartTotalEl.textContent = formatPrice(total);
-    cartFab.classList.toggle("show", count > 0);
 
     cartItemsEl.innerHTML = "";
     if(count === 0){
@@ -1049,6 +1100,7 @@
 
     renderAllGrids();
     pulseCard(id);
+    bumpFab();
     updateCartUI();
   });
 
