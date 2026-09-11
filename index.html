@@ -85,6 +85,9 @@
   .hero img.logo{
     max-width: 320px;
     width: 78%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
     margin: 0 auto 10px;
   }
   .hero__claim{
@@ -299,6 +302,50 @@
     font-style: italic;
     margin: 8px 0 0;
   }
+  .custom-block{
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px dashed rgba(245,235,220,.15);
+  }
+  .custom-title{
+    color: #cfc9bc;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .3px;
+    margin: 0 0 10px;
+  }
+  .custom-unit + .custom-unit{ margin-top: 12px; }
+  .custom-unit-label{
+    color: var(--cream);
+    font-size: 12.5px;
+    font-weight: 700;
+    margin: 0 0 6px;
+  }
+  .custom-options{
+    display:flex;
+    flex-wrap:wrap;
+    gap: 8px;
+  }
+  .chk{
+    display:inline-flex;
+    align-items:center;
+    gap: 6px;
+    background: rgba(245,235,220,.08);
+    border-radius: 999px;
+    padding: 10px 14px;
+    min-height: 44px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--cream);
+    cursor:pointer;
+  }
+  .chk input{
+    width: 17px;
+    height: 17px;
+    accent-color: var(--blue);
+    flex-shrink:0;
+  }
   .card__footer{
     display:flex;
     align-items:center;
@@ -448,6 +495,7 @@
   }
   .cart-item__info{ font-size: 14px; font-weight:600; }
   .cart-item__info span{ display:block; font-weight:400; font-size:12.5px; color:#6b6455; }
+  .cart-item__note{ display:block; font-weight:600; font-size:12px; color: var(--blue); margin-top: 2px; }
   .cart-item__right{ display:flex; align-items:center; gap:10px; }
   .cart-item__price{ font-weight:700; font-size:14px; min-width: 72px; text-align:right; }
   .cart-empty{
@@ -569,6 +617,9 @@
   }
   footer .logo-mini{
     width: 64px;
+    height: 64px;
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
     margin: 0 auto 14px;
   }
   footer h3{
@@ -682,7 +733,7 @@
 <footer>
   <picture>
     <source srcset="assets/logo-circular.webp" type="image/webp">
-    <img class="logo-mini" src="assets/logo-circular.png" alt="Tacos Ruth" loading="lazy" width="128" height="128">
+    <img class="logo-mini" src="assets/logo-circular.png" alt="Tacos Ruth" loading="lazy" width="64" height="64">
   </picture>
   <h3>Tacos Ruth</h3>
   <p>🕐 Miércoles a domingos de 19:30 a 00:00</p>
@@ -809,6 +860,8 @@
       precio: PRECIOS_PROMOS.dosDobles.precio,
       precioNormal: PRECIOS_PROMOS.dosDobles.antes,
       photo: { jpg: "assets/promo-2x-dobles.jpg", webp: "assets/promo-2x-dobles.webp" },
+      burgerUnits: 2,
+      burgerLabels: ["Doble 1", "Doble 2"],
       categoria: "promos"
     },
     {
@@ -818,6 +871,8 @@
       precio: PRECIOS_PROMOS.tresSimples.precio,
       precioNormal: PRECIOS_PROMOS.tresSimples.antes,
       photo: { jpg: "assets/promo-3x-simples.jpg", webp: "assets/promo-3x-simples.webp" },
+      burgerUnits: 3,
+      burgerLabels: ["Simple 1", "Simple 2", "Simple 3"],
       categoria: "promos"
     },
     {
@@ -827,6 +882,7 @@
       precio: PRECIOS_PROMOS.comboTacoBurger.precio,
       precioNormal: PRECIOS_PROMOS.comboTacoBurger.antes,
       photo: { jpg: "assets/promo-combo-taco-burger.jpg", webp: "assets/promo-combo-taco-burger.webp" },
+      burgerUnits: 1,
       categoria: "promos"
     }
   ];
@@ -840,6 +896,7 @@
       precioNormal: precioNormalHamburguesa("simple"),
       badge: PROMO_ACTIVA,
       photo: { jpg: "assets/hamburguesa-simple.jpg", webp: "assets/hamburguesa-simple.webp" },
+      burgerUnits: 1,
       categoria: "hamburguesas"
     },
     {
@@ -850,6 +907,7 @@
       precioNormal: precioNormalHamburguesa("doble"),
       badge: PROMO_ACTIVA,
       photo: { jpg: "assets/hamburguesa-doble.jpg", webp: "assets/hamburguesa-doble.webp" },
+      burgerUnits: 1,
       categoria: "hamburguesas"
     },
     {
@@ -860,6 +918,7 @@
       precioNormal: precioNormalHamburguesa("triple"),
       badge: PROMO_ACTIVA,
       photo: { jpg: "assets/hamburguesa-triple.jpg", webp: "assets/hamburguesa-triple.webp" },
+      burgerUnits: 1,
       categoria: "hamburguesas"
     }
   ];
@@ -896,7 +955,10 @@
 
   var ALL_PRODUCTS = PRODUCTS_PROMOS.concat(PRODUCTS_HAMBURGUESAS, PRODUCTS_TACOS);
 
-  var cart = {}; // { id: qty }
+  // cart[lineKey] = { id: productId, qty: N, burgers: [{cebolla,ketchup,mostaza}, ...] | null }
+  // Distintas personalizaciones de un mismo producto son líneas separadas
+  // (mismo criterio que las promos: cada línea es independiente, sin motor de reglas).
+  var cart = {};
 
   function formatPrice(n){
     return "$" + n.toLocaleString("es-AR");
@@ -908,14 +970,77 @@
 
   function cartTotal(){
     var total = 0;
-    Object.keys(cart).forEach(function(id){
-      total += findProduct(id).precio * cart[id];
+    Object.keys(cart).forEach(function(key){
+      var line = cart[key];
+      total += findProduct(line.id).precio * line.qty;
     });
     return total;
   }
 
   function cartCount(){
-    return Object.values(cart).reduce(function(a,b){ return a+b; }, 0);
+    return Object.keys(cart).reduce(function(sum, key){ return sum + cart[key].qty; }, 0);
+  }
+
+  // ---------- Personalización de hamburguesas (cebolla / kétchup / mostaza) ----------
+  var draftCustomization = {}; // { productId: [{cebolla,ketchup,mostaza}, ...] } — estado "en edición" de cada card
+
+  function freshBurgers(n){
+    var arr = [];
+    for (var i = 0; i < n; i++) arr.push({ cebolla: true, ketchup: true, mostaza: true });
+    return arr;
+  }
+
+  ALL_PRODUCTS.forEach(function(p){
+    if (p.burgerUnits) draftCustomization[p.id] = freshBurgers(p.burgerUnits);
+  });
+
+  function cloneBurgers(burgers){
+    return burgers.map(function(b){ return { cebolla: b.cebolla, ketchup: b.ketchup, mostaza: b.mostaza }; });
+  }
+
+  function burgersSignature(burgers){
+    if (!burgers || !burgers.length) return "";
+    return burgers.map(function(b){
+      return (b.cebolla ? "1" : "0") + (b.ketchup ? "1" : "0") + (b.mostaza ? "1" : "0");
+    }).join("-");
+  }
+
+  function lineKeyFor(id, burgers){
+    var sig = burgersSignature(burgers);
+    return sig ? id + "|" + sig : id;
+  }
+
+  function qtyForCard(p){
+    if (!p.burgerUnits) return cart[p.id] ? cart[p.id].qty : 0;
+    var key = lineKeyFor(p.id, draftCustomization[p.id]);
+    return cart[key] ? cart[key].qty : 0;
+  }
+
+  function burgerExclusions(b){
+    var out = [];
+    if (!b.cebolla) out.push("cebolla");
+    if (!b.ketchup) out.push("kétchup");
+    if (!b.mostaza) out.push("mostaza");
+    return out;
+  }
+
+  // Líneas de aclaración para el mensaje de WhatsApp (y el panel del carrito).
+  // Si nadie desmarcó nada, no devuelve ninguna línea.
+  function burgersNoteLines(p, burgers){
+    if (!burgers || !burgers.length) return [];
+    if (burgers.length === 1){
+      var exc = burgerExclusions(burgers[0]);
+      return exc.length ? ["SIN " + exc.join(", SIN ")] : [];
+    }
+    var lines = [];
+    burgers.forEach(function(b, i){
+      var excU = burgerExclusions(b);
+      if (excU.length){
+        var label = (p.burgerLabels && p.burgerLabels[i]) || ("Hamburguesa " + (i + 1));
+        lines.push(label + ": SIN " + excU.join(", SIN "));
+      }
+    });
+    return lines;
   }
 
   // ---------- Render menú ----------
@@ -954,10 +1079,34 @@
     return p.badge ? '<span class="card__badge">PROMO</span>' : '';
   }
 
+  function checkboxHtml(id, unitIndex, flag, label, checked){
+    return '<label class="chk"><input type="checkbox" data-id="' + id + '" data-unit="' + unitIndex + '" data-flag="' + flag + '"' + (checked ? ' checked' : '') + '> ' + label + '</label>';
+  }
+
+  function customizationHtml(p){
+    if (!p.burgerUnits) return '';
+    var units = draftCustomization[p.id];
+    var multi = p.burgerUnits > 1;
+    var rows = units.map(function(u, i){
+      var label = multi ? '<p class="custom-unit-label">' + ((p.burgerLabels && p.burgerLabels[i]) || ('Hamburguesa ' + (i + 1))) + '</p>' : '';
+      return '<div class="custom-unit">' + label +
+        '<div class="custom-options">' +
+          checkboxHtml(p.id, i, 'cebolla', 'Cebolla', u.cebolla) +
+          checkboxHtml(p.id, i, 'ketchup', 'Kétchup', u.ketchup) +
+          checkboxHtml(p.id, i, 'mostaza', 'Mostaza', u.mostaza) +
+        '</div>' +
+      '</div>';
+    }).join('');
+    return '<div class="custom-block">' +
+      '<p class="custom-title">' + (multi ? 'Personalizá cada hamburguesa' : 'Personalizá tu hamburguesa') + '</p>' +
+      rows +
+    '</div>';
+  }
+
   function renderGrid(containerEl, products, extraClass){
     containerEl.innerHTML = "";
     products.forEach(function(p){
-      var qty = cart[p.id] || 0;
+      var qty = qtyForCard(p);
       var card = document.createElement("div");
       card.className = "card" + (extraClass ? " " + extraClass : "") + (qty > 0 ? " has-qty" : "");
       card.id = "card-" + p.id;
@@ -968,6 +1117,7 @@
           '<h3 class="condensed card__name">' + p.nombre + '</h3>' +
           '<p class="card__desc">' + p.desc + '</p>' +
           (p.dip ? '<p class="card__dip">' + p.dip + '</p>' : '') +
+          customizationHtml(p) +
           '<div class="card__footer">' +
             '<span class="card__price-wrap">' + cardPriceHtml(p) + '</span>' +
             '<div class="qty">' +
@@ -1006,13 +1156,20 @@
     if(!btn) return;
     var id = btn.dataset.id;
     var action = btn.dataset.action;
-    var current = cart[id] || 0;
+    var product = findProduct(id);
+    var burgers = product.burgerUnits ? cloneBurgers(draftCustomization[id]) : null;
+    var key = lineKeyFor(id, burgers);
+    var current = cart[key] ? cart[key].qty : 0;
 
     if(action === "inc"){
-      cart[id] = current + 1;
+      if(cart[key]){
+        cart[key].qty += 1;
+      } else {
+        cart[key] = { id: id, qty: 1, burgers: burgers };
+      }
     } else if(action === "dec" && current > 0){
-      cart[id] = current - 1;
-      if(cart[id] === 0) delete cart[id];
+      cart[key].qty -= 1;
+      if(cart[key].qty === 0) delete cart[key];
     }
 
     renderAllGrids();
@@ -1021,9 +1178,27 @@
     updateCartUI();
   }
 
+  function onGridChange(e){
+    var input = e.target.closest('input[type="checkbox"][data-flag]');
+    if(!input) return;
+    var id = input.dataset.id;
+    var unitIndex = Number(input.dataset.unit);
+    var flag = input.dataset.flag;
+    draftCustomization[id][unitIndex][flag] = input.checked;
+
+    var p = findProduct(id);
+    var qty = qtyForCard(p);
+    var qtyEl = document.getElementById("qty-" + id);
+    if(qtyEl) qtyEl.textContent = qty;
+    var card = document.getElementById("card-" + id);
+    if(card) card.classList.toggle("has-qty", qty > 0);
+  }
+
   promosGrid.addEventListener("click", onGridClick);
   burgersGrid.addEventListener("click", onGridClick);
   tacosGrid.addEventListener("click", onGridClick);
+  promosGrid.addEventListener("change", onGridChange);
+  burgersGrid.addEventListener("change", onGridChange);
 
   // ---------- Carrito flotante + panel ----------
   var cartFab = document.getElementById("cartFab");
@@ -1056,18 +1231,21 @@
     if(count === 0){
       cartItemsEl.innerHTML = '<p class="cart-empty">Todavía no agregaste nada del menú 🌮</p>';
     } else {
-      Object.keys(cart).forEach(function(id){
-        var p = findProduct(id);
-        var qty = cart[id];
+      Object.keys(cart).forEach(function(key){
+        var line = cart[key];
+        var p = findProduct(line.id);
+        var qty = line.qty;
+        var notes = burgersNoteLines(p, line.burgers);
+        var notesHtml = notes.length ? '<span class="cart-item__note">' + notes.join(" · ") + '</span>' : '';
         var row = document.createElement("div");
         row.className = "cart-item";
         row.innerHTML =
-          '<div class="cart-item__info">' + p.nombre + '<span>' + qty + ' x ' + formatPrice(p.precio) + '</span></div>' +
+          '<div class="cart-item__info">' + p.nombre + notesHtml + '<span>' + qty + ' x ' + formatPrice(p.precio) + '</span></div>' +
           '<div class="cart-item__right">' +
             '<div class="qty">' +
-              '<button type="button" data-action="dec" data-id="' + p.id + '" aria-label="Quitar">–</button>' +
+              '<button type="button" data-action="dec" data-line-key="' + key + '" aria-label="Quitar">–</button>' +
               '<span class="qty__num">' + qty + '</span>' +
-              '<button type="button" data-action="inc" data-id="' + p.id + '" aria-label="Agregar">+</button>' +
+              '<button type="button" data-action="inc" data-line-key="' + key + '" aria-label="Agregar">+</button>' +
             '</div>' +
             '<span class="cart-item__price">' + formatPrice(p.precio * qty) + '</span>' +
           '</div>';
@@ -1081,15 +1259,17 @@
   cartItemsEl.addEventListener("click", function(e){
     var btn = e.target.closest("button[data-action]");
     if(!btn) return;
-    var id = btn.dataset.id;
+    var key = btn.dataset.lineKey;
     var action = btn.dataset.action;
-    var current = cart[id] || 0;
+    var line = cart[key];
+    if(!line) return;
+    var id = line.id;
 
     if(action === "inc"){
-      cart[id] = current + 1;
-    } else if(action === "dec" && current > 0){
-      cart[id] = current - 1;
-      if(cart[id] === 0) delete cart[id];
+      line.qty += 1;
+    } else if(action === "dec"){
+      line.qty -= 1;
+      if(line.qty <= 0) delete cart[key];
     }
 
     renderAllGrids();
@@ -1162,10 +1342,14 @@
     var lines = [];
     lines.push("*NUEVO PEDIDO - TACOS RUTH*");
     lines.push("---");
-    Object.keys(cart).forEach(function(id){
-      var p = findProduct(id);
-      var qty = cart[id];
+    Object.keys(cart).forEach(function(key){
+      var line = cart[key];
+      var p = findProduct(line.id);
+      var qty = line.qty;
       lines.push(qty + "x " + p.nombre + " — " + formatPrice(p.precio * qty));
+      burgersNoteLines(p, line.burgers).forEach(function(note){
+        lines.push("   " + note);
+      });
     });
     lines.push("---");
     lines.push("*TOTAL: " + formatPrice(cartTotal()) + "*");
