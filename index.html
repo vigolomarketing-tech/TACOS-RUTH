@@ -123,19 +123,25 @@
   .btn--outline{ background: transparent; color: var(--blue); }
   .btn--solid:hover{ background: var(--blue-dark); }
 
-  /* ---------- CLOSED BANNER ---------- */
-  .closed-banner{
-    display:none;
-    background: #FFDE7A;
-    color: #4a3400;
+  /* ---------- STATUS BAR (abierto / cerrado) ---------- */
+  .status-bar{
+    position: sticky;
+    top: 0;
+    z-index: 45;
     text-align:center;
     font-weight:700;
-    font-size: 14px;
-    padding: 12px 20px;
-    border-top: 2px solid var(--blue);
-    border-bottom: 2px solid var(--blue);
+    font-size: 13px;
+    line-height: 1.3;
+    padding: 8px 16px;
   }
-  .closed-banner.show{ display:block; }
+  .status-bar--closed{
+    background: #FFDE7A;
+    color: #4a3400;
+  }
+  .status-bar--open{
+    background: #1FAD4C;
+    color: #fff;
+  }
 
   /* ---------- INFO BAR ---------- */
   .infobar{
@@ -669,6 +675,8 @@
 </head>
 <body>
 
+<div id="statusBar" class="status-bar"></div>
+
 <!-- ================= HERO ================= -->
 <section class="hero">
   <div class="hero__sparks" aria-hidden="true">✦ ✧ ✦</div>
@@ -682,10 +690,6 @@
     <a id="heroWhatsapp" href="https://wa.me/5491132870962" target="_blank" rel="noopener" class="btn btn--outline">Pedir por WhatsApp</a>
   </div>
 </section>
-
-<div id="closedBanner" class="closed-banner">
-  🌙 Ahora estamos cerrados — igual dejanos tu pedido y te confirmamos apenas abramos
-</div>
 
 <!-- ================= PROMOS ================= -->
 <section class="promos-section" id="promos">
@@ -1382,7 +1386,11 @@
     var openTime = minutes >= (19 * 60 + 30) || minutes < 0; // desde 19:30
     var isOpen = openDay && openTime;
 
-    document.getElementById("closedBanner").classList.toggle("show", !isOpen);
+    var statusBar = document.getElementById("statusBar");
+    statusBar.className = "status-bar " + (isOpen ? "status-bar--open" : "status-bar--closed");
+    statusBar.textContent = isOpen
+      ? "🟢 Estamos abiertos — pedí ahora"
+      : "🌙 Ahora estamos cerrados — igual dejanos tu pedido y te confirmamos apenas abramos";
   }
 
   checkOpen();
