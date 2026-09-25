@@ -352,6 +352,27 @@
     accent-color: var(--blue);
     flex-shrink:0;
   }
+  .extra-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap: 10px;
+  }
+  .extra-row + .extra-row{ margin-top: 10px; }
+  .extra-info{
+    display:flex;
+    flex-direction:column;
+    gap: 2px;
+  }
+  .extra-name{
+    color: var(--cream);
+    font-size: 13.5px;
+    font-weight: 700;
+  }
+  .extra-price{
+    color: #9a9488;
+    font-size: 11.5px;
+  }
   .card__footer{
     display:flex;
     align-items:center;
@@ -687,7 +708,7 @@
   <p class="hero__claim">Tacos que sí saben a casa</p>
   <div class="hero__ctas">
     <a href="#promos" class="btn btn--solid">Ver menú</a>
-    <a id="heroWhatsapp" href="https://wa.me/5491132870962" target="_blank" rel="noopener" class="btn btn--outline">Pedir por WhatsApp</a>
+    <a id="heroWhatsapp" href="https://wa.me/5491166474712" target="_blank" rel="noopener" class="btn btn--outline">Pedir por WhatsApp</a>
   </div>
 </section>
 
@@ -744,7 +765,7 @@
   <p>📍 Delivery en Longchamps y Glew, Buenos Aires</p>
   <div class="footer-links">
     <a href="https://instagram.com/tacos_ruth" target="_blank" rel="noopener">Instagram @tacos_ruth</a>
-    <a href="https://wa.me/5491132870962" target="_blank" rel="noopener">WhatsApp</a>
+    <a href="https://wa.me/5491166474712" target="_blank" rel="noopener">WhatsApp</a>
   </div>
   <p class="copy">Tacos Ruth · Más que tacos</p>
 </footer>
@@ -816,7 +837,7 @@
 (function(){
   "use strict";
 
-  var WHATSAPP_NUMBER = "5491132870962";
+  var WHATSAPP_NUMBER = "5491166474712";
 
   // ====================================================================
   // CONFIG — precios y switch de promociones.
@@ -843,6 +864,15 @@
     menu1: 15000,
     menu2: 20000,
     menu3: 15000
+  };
+
+  var PRECIOS_ADICIONALES = {
+    carneExtra: 2500,
+    cheddarPapas: 2500
+  };
+  var NOMBRES_ADICIONALES = {
+    carneExtra: "Carne extra",
+    cheddarPapas: "Cheddar en las papas"
   };
   // ====================================================================
   // FIN CONFIG
@@ -901,6 +931,7 @@
       badge: PROMO_ACTIVA,
       photo: { jpg: "assets/hamburguesa-simple.jpg", webp: "assets/hamburguesa-simple.webp" },
       burgerUnits: 1,
+      extrasDisponibles: ["carneExtra", "cheddarPapas"],
       categoria: "hamburguesas"
     },
     {
@@ -912,6 +943,7 @@
       badge: PROMO_ACTIVA,
       photo: { jpg: "assets/hamburguesa-doble.jpg", webp: "assets/hamburguesa-doble.webp" },
       burgerUnits: 1,
+      extrasDisponibles: ["carneExtra", "cheddarPapas"],
       categoria: "hamburguesas"
     },
     {
@@ -923,6 +955,7 @@
       badge: PROMO_ACTIVA,
       photo: { jpg: "assets/hamburguesa-triple.jpg", webp: "assets/hamburguesa-triple.webp" },
       burgerUnits: 1,
+      extrasDisponibles: ["carneExtra", "cheddarPapas"],
       categoria: "hamburguesas"
     }
   ];
@@ -935,6 +968,7 @@
       dip: "Dips de acompañamiento",
       precio: PRECIOS_TACOS.menu1,
       photo: { jpg: "assets/menu-1.jpg", webp: "assets/menu-1.webp" },
+      extrasDisponibles: ["cheddarPapas"],
       categoria: "tacos"
     },
     {
@@ -953,6 +987,7 @@
       dip: "Dip de acompañante (salsa picante)",
       precio: PRECIOS_TACOS.menu3,
       photo: { jpg: "assets/menu-3.jpg", webp: "assets/menu-3.webp" },
+      extrasDisponibles: ["cheddarPapas"],
       categoria: "tacos"
     }
   ];
@@ -976,7 +1011,9 @@
     var total = 0;
     Object.keys(cart).forEach(function(key){
       var line = cart[key];
-      total += findProduct(line.id).precio * line.qty;
+      var p = findProduct(line.id);
+      var unitPrice = p.precio + extrasUnitCost(p, line.extras);
+      total += unitPrice * line.qty;
     });
     return total;
   }
@@ -1009,14 +1046,53 @@
     }).join("-");
   }
 
-  function lineKeyFor(id, burgers){
-    var sig = burgersSignature(burgers);
-    return sig ? id + "|" + sig : id;
+  // ---------- Adicionales (carne extra / cheddar en las papas) ----------
+  var draftExtras = {}; // { productId: { adicionalKey: cantidad, ... } } — estado "en edición" de cada card
+
+  ALL_PRODUCTS.forEach(function(p){
+    if (p.extrasDisponibles && p.extrasDisponibles.length){
+      var obj = {};
+      p.extrasDisponibles.forEach(function(k){ obj[k] = 0; });
+      draftExtras[p.id] = obj;
+    }
+  });
+
+  function cloneExtras(extras){
+    var out = {};
+    Object.keys(extras).forEach(function(k){ out[k] = extras[k]; });
+    return out;
+  }
+
+  function extrasSignature(product, extras){
+    if (!product.extrasDisponibles || !product.extrasDisponibles.length || !extras) return "";
+    var anyNonZero = product.extrasDisponibles.some(function(k){ return (extras[k] || 0) > 0; });
+    if (!anyNonZero) return "";
+    return product.extrasDisponibles.map(function(k){ return k + ":" + (extras[k] || 0); }).join(",");
+  }
+
+  // Costo que suman los adicionales a UNA unidad del producto (no multiplicado por la cantidad de la línea).
+  function extrasUnitCost(product, extras){
+    if (!extras) return 0;
+    var total = 0;
+    (product.extrasDisponibles || []).forEach(function(k){
+      total += (PRECIOS_ADICIONALES[k] || 0) * (extras[k] || 0);
+    });
+    return total;
+  }
+
+  function lineKeyFor(product, burgers, extras){
+    var parts = [];
+    var burgSig = burgersSignature(burgers);
+    if (burgSig) parts.push("b=" + burgSig);
+    var extSig = extrasSignature(product, extras);
+    if (extSig) parts.push("e=" + extSig);
+    return parts.length ? product.id + "|" + parts.join(";") : product.id;
   }
 
   function qtyForCard(p){
-    if (!p.burgerUnits) return cart[p.id] ? cart[p.id].qty : 0;
-    var key = lineKeyFor(p.id, draftCustomization[p.id]);
+    var burgers = p.burgerUnits ? draftCustomization[p.id] : null;
+    var extras = (p.extrasDisponibles && p.extrasDisponibles.length) ? draftExtras[p.id] : null;
+    var key = lineKeyFor(p, burgers, extras);
     return cart[key] ? cart[key].qty : 0;
   }
 
@@ -1042,6 +1118,24 @@
       if (excU.length){
         var label = (p.burgerLabels && p.burgerLabels[i]) || ("Hamburguesa " + (i + 1));
         lines.push(label + ": SIN " + excU.join(", SIN "));
+      }
+    });
+    return lines;
+  }
+
+  // Líneas "+ Adicional — $precio" para el mensaje de WhatsApp y el panel del
+  // carrito. lineQty es la cantidad de la línea del carrito (así se muestra
+  // el total real de ese adicional en todo el pedido, no solo por unidad).
+  function extrasNoteLines(product, extras, lineQty){
+    if (!extras) return [];
+    var lines = [];
+    (product.extrasDisponibles || []).forEach(function(k){
+      var perUnitQty = extras[k] || 0;
+      if (perUnitQty > 0){
+        var totalQty = perUnitQty * lineQty;
+        var totalPrice = (PRECIOS_ADICIONALES[k] || 0) * totalQty;
+        var label = NOMBRES_ADICIONALES[k] + (totalQty > 1 ? " x" + totalQty : "");
+        lines.push("+ " + label + " — " + formatPrice(totalPrice));
       }
     });
     return lines;
@@ -1107,6 +1201,29 @@
     '</div>';
   }
 
+  function extrasHtml(p){
+    if (!p.extrasDisponibles || !p.extrasDisponibles.length) return '';
+    var draft = draftExtras[p.id];
+    var rows = p.extrasDisponibles.map(function(k){
+      var qty = draft[k] || 0;
+      return '<div class="extra-row">' +
+        '<div class="extra-info">' +
+          '<span class="extra-name">' + NOMBRES_ADICIONALES[k] + '</span>' +
+          '<span class="extra-price">+' + formatPrice(PRECIOS_ADICIONALES[k]) + ' c/u</span>' +
+        '</div>' +
+        '<div class="qty">' +
+          '<button type="button" data-extra-action="dec" data-id="' + p.id + '" data-extra="' + k + '" aria-label="Quitar ' + NOMBRES_ADICIONALES[k] + '">–</button>' +
+          '<span class="qty__num" id="extra-qty-' + p.id + '-' + k + '">' + qty + '</span>' +
+          '<button type="button" data-extra-action="inc" data-id="' + p.id + '" data-extra="' + k + '" aria-label="Agregar ' + NOMBRES_ADICIONALES[k] + '">+</button>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+    return '<div class="custom-block extras-block">' +
+      '<p class="custom-title">Adicionales</p>' +
+      rows +
+    '</div>';
+  }
+
   function renderGrid(containerEl, products, extraClass){
     containerEl.innerHTML = "";
     products.forEach(function(p){
@@ -1122,6 +1239,7 @@
           '<p class="card__desc">' + p.desc + '</p>' +
           (p.dip ? '<p class="card__dip">' + p.dip + '</p>' : '') +
           customizationHtml(p) +
+          extrasHtml(p) +
           '<div class="card__footer">' +
             '<span class="card__price-wrap">' + cardPriceHtml(p) + '</span>' +
             '<div class="qty">' +
@@ -1162,14 +1280,15 @@
     var action = btn.dataset.action;
     var product = findProduct(id);
     var burgers = product.burgerUnits ? cloneBurgers(draftCustomization[id]) : null;
-    var key = lineKeyFor(id, burgers);
+    var extras = (product.extrasDisponibles && product.extrasDisponibles.length) ? cloneExtras(draftExtras[id]) : null;
+    var key = lineKeyFor(product, burgers, extras);
     var current = cart[key] ? cart[key].qty : 0;
 
     if(action === "inc"){
       if(cart[key]){
         cart[key].qty += 1;
       } else {
-        cart[key] = { id: id, qty: 1, burgers: burgers };
+        cart[key] = { id: id, qty: 1, burgers: burgers, extras: extras };
       }
     } else if(action === "dec" && current > 0){
       cart[key].qty -= 1;
@@ -1198,11 +1317,38 @@
     if(card) card.classList.toggle("has-qty", qty > 0);
   }
 
+  function onExtraClick(e){
+    var btn = e.target.closest("button[data-extra-action]");
+    if(!btn) return;
+    var id = btn.dataset.id;
+    var extraKey = btn.dataset.extra;
+    var action = btn.dataset.extraAction;
+    var current = draftExtras[id][extraKey] || 0;
+
+    if(action === "inc"){
+      draftExtras[id][extraKey] = current + 1;
+    } else if(action === "dec" && current > 0){
+      draftExtras[id][extraKey] = current - 1;
+    }
+
+    var numEl = document.getElementById("extra-qty-" + id + "-" + extraKey);
+    if(numEl) numEl.textContent = draftExtras[id][extraKey];
+
+    var p = findProduct(id);
+    var qty = qtyForCard(p);
+    var qtyEl = document.getElementById("qty-" + id);
+    if(qtyEl) qtyEl.textContent = qty;
+    var card = document.getElementById("card-" + id);
+    if(card) card.classList.toggle("has-qty", qty > 0);
+  }
+
   promosGrid.addEventListener("click", onGridClick);
   burgersGrid.addEventListener("click", onGridClick);
   tacosGrid.addEventListener("click", onGridClick);
   promosGrid.addEventListener("change", onGridChange);
   burgersGrid.addEventListener("change", onGridChange);
+  burgersGrid.addEventListener("click", onExtraClick);
+  tacosGrid.addEventListener("click", onExtraClick);
 
   // ---------- Carrito flotante + panel ----------
   var cartFab = document.getElementById("cartFab");
@@ -1239,19 +1385,20 @@
         var line = cart[key];
         var p = findProduct(line.id);
         var qty = line.qty;
-        var notes = burgersNoteLines(p, line.burgers);
+        var notes = burgersNoteLines(p, line.burgers).concat(extrasNoteLines(p, line.extras, qty));
         var notesHtml = notes.length ? '<span class="cart-item__note">' + notes.join(" · ") + '</span>' : '';
+        var unitPrice = p.precio + extrasUnitCost(p, line.extras);
         var row = document.createElement("div");
         row.className = "cart-item";
         row.innerHTML =
-          '<div class="cart-item__info">' + p.nombre + notesHtml + '<span>' + qty + ' x ' + formatPrice(p.precio) + '</span></div>' +
+          '<div class="cart-item__info">' + p.nombre + notesHtml + '<span>' + qty + ' x ' + formatPrice(unitPrice) + '</span></div>' +
           '<div class="cart-item__right">' +
             '<div class="qty">' +
               '<button type="button" data-action="dec" data-line-key="' + key + '" aria-label="Quitar">–</button>' +
               '<span class="qty__num">' + qty + '</span>' +
               '<button type="button" data-action="inc" data-line-key="' + key + '" aria-label="Agregar">+</button>' +
             '</div>' +
-            '<span class="cart-item__price">' + formatPrice(p.precio * qty) + '</span>' +
+            '<span class="cart-item__price">' + formatPrice(unitPrice * qty) + '</span>' +
           '</div>';
         cartItemsEl.appendChild(row);
       });
@@ -1352,6 +1499,9 @@
       var qty = line.qty;
       lines.push(qty + "x " + p.nombre + " — " + formatPrice(p.precio * qty));
       burgersNoteLines(p, line.burgers).forEach(function(note){
+        lines.push("   " + note);
+      });
+      extrasNoteLines(p, line.extras, qty).forEach(function(note){
         lines.push("   " + note);
       });
     });
